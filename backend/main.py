@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-#main.py
-=======
 from typing import Union
 from fastapi import FastAPI, File, UploadFile
 from typing import List
@@ -58,4 +55,4 @@ def check_grammar_with_languagetool(text):
             })
 
     return grammar_errors
->>>>>>> Stashed changes
+
