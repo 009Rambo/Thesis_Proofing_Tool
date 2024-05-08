@@ -6,9 +6,17 @@ import requests
 
 app = FastAPI()
 
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
+  
+  
 
 @app.post("/check-grammar")
 async def check_grammar(file: UploadFile = File(...)):
@@ -55,4 +63,5 @@ def check_grammar_with_languagetool(text):
             })
 
     return grammar_errors
+
 
