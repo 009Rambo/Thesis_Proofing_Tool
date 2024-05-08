@@ -29,7 +29,9 @@ def upload_file():
 
         # Extract text content from the PDF file
         text = extract_text_from_pdf(file_path)
+
         pages = count_pages(file_path)
+
 
         return jsonify({
             'message': 'File uploaded successfully',
@@ -37,6 +39,7 @@ def upload_file():
             'file_path': file_path,
             'text_content': text,
             'pages_amount' : pages 
+
         }), 200
 
     except Exception as e:
@@ -51,6 +54,7 @@ def extract_text_from_pdf(file_path):
     except Exception as e:
         text = f'Error extracting text: {str(e)}'
     return text
+
 
 
 def count_pages(file_path):
