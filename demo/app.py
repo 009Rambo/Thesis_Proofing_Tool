@@ -26,33 +26,27 @@ def upload_file():
         file_path = os.path.join(upload_folder, file.filename)
         file.save(file_path)
 
-<<<<<<< HEAD
+
         # Extract text content and analyze PDF
         text_content, text_blocks, pages = process_pdf(file_path)
-=======
-        # Extract text content from the PDF file
+
         text = extract_text_from_pdf(file_path)
 
         pages = count_pages(file_path)
 
         stated_number_of_pages = compare_pages(text, pages)
 
->>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
+
 
         return jsonify({
             'message': 'File uploaded successfully',
             'file_name': file.filename,
             'file_path': file_path,
-<<<<<<< HEAD
-            'text_content': text_content,
             'text_blocks': text_blocks,
-            'pages_amount': pages
-=======
+            'pages_amount': pages,
             'text_content': text,
-            'pages_amount' : pages,
             'stated_equals_actual' : stated_number_of_pages
 
->>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
         }), 200
 
     except Exception as e:
@@ -93,7 +87,6 @@ def analyze_pdf(file_path):
                             current_font_size = None
                             current_font_name = None
 
-<<<<<<< HEAD
                             for span in line["spans"]:
                                 text = span["text"].strip()
                                 font_size = span["size"]
@@ -137,9 +130,6 @@ def analyze_pdf(file_path):
 
     return text_blocks
 
-=======
-# Here we count the amount of pages in the file
->>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
 def count_pages(file_path):
     pages = 0
     try:
