@@ -16,6 +16,7 @@
         <p><strong>Filename:</strong> <span id="fileName"></span></p>
         <p><strong>File Path:</strong> <span id="filePath"></span></p>
         <p><strong>Amount of pages:</strong> <span id="pagesAmount"></span></p>
+        <p><strong id="statedEqualsActual"> </strong> </p>
         <h2>PDF Text Content</h2>
         <pre id="pdfContent"></pre>
         
@@ -48,7 +49,7 @@
                     document.getElementById('filePath').innerText = data.file_path;
                     document.getElementById('pdfContent').innerText = data.text_content;
                     document.getElementById('pagesAmount').innerText = data.pages_amount;
-
+                    document.getElementById('statedEqualsActual').innerText = data.stated_equals_actual;
                     document.getElementById('fileInfo').style.display = 'block';
                 }
 
