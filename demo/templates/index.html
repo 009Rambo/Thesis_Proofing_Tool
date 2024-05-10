@@ -15,6 +15,7 @@
         <h2>Uploaded File Information</h2>
         <p><strong>Filename:</strong> <span id="fileName"></span></p>
         <p><strong>File Path:</strong> <span id="filePath"></span></p>
+<<<<<<< HEAD
         <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
 
         <div id="paragraphsDiv" style="display: none;">
@@ -27,6 +28,10 @@
             <ul id="headingsList"></ul>
         </div>
 
+=======
+        <p><strong>Amount of pages:</strong> <span id="pagesAmount"></span></p>
+        <p><strong id="statedEqualsActual"> </strong> </p>
+>>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
         <h2>PDF Text Content</h2>
         <pre id="pdfContent"></pre>
     </div>
@@ -57,10 +62,14 @@
                     document.getElementById('fileName').innerText = data.file_name;
                     document.getElementById('filePath').innerText = data.file_path;
                     document.getElementById('pagesAmount').innerText = data.pages_amount;
+<<<<<<< HEAD
 
                     renderTextBlocks(data.text_blocks);
 
                     document.getElementById('pdfContent').innerText = data.text_content;
+=======
+                    document.getElementById('statedEqualsActual').innerText = data.stated_equals_actual;
+>>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
                     document.getElementById('fileInfo').style.display = 'block';
                 }
 
