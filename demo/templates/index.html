@@ -15,11 +15,25 @@
         <h2>Uploaded File Information</h2>
         <p><strong>Filename:</strong> <span id="fileName"></span></p>
         <p><strong>File Path:</strong> <span id="filePath"></span></p>
+<<<<<<< HEAD
+        <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
+
+        <div id="paragraphsDiv" style="display: none;">
+            <h2>Paragraphs</h2>
+            <ul id="paragraphsList"></ul>
+        </div>
+
+        <div id="headingsDiv" style="display: none;">
+            <h2>Headings</h2>
+            <ul id="headingsList"></ul>
+        </div>
+
+=======
         <p><strong>Amount of pages:</strong> <span id="pagesAmount"></span></p>
         <p><strong id="statedEqualsActual"> </strong> </p>
+>>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
         <h2>PDF Text Content</h2>
         <pre id="pdfContent"></pre>
-        
     </div>
 
     <script>
@@ -47,9 +61,15 @@
                 if (response.ok) {
                     document.getElementById('fileName').innerText = data.file_name;
                     document.getElementById('filePath').innerText = data.file_path;
-                    document.getElementById('pdfContent').innerText = data.text_content;
                     document.getElementById('pagesAmount').innerText = data.pages_amount;
+<<<<<<< HEAD
+
+                    renderTextBlocks(data.text_blocks);
+
+                    document.getElementById('pdfContent').innerText = data.text_content;
+=======
                     document.getElementById('statedEqualsActual').innerText = data.stated_equals_actual;
+>>>>>>> dd9c085c1d72c6fca7c3df7a17d8bf65269a8844
                     document.getElementById('fileInfo').style.display = 'block';
                 }
 
@@ -58,6 +78,78 @@
                 document.getElementById('message').innerText = 'Error uploading file.';
             }
         }
+
+        function renderTextBlocks(textBlocks) {
+            const textGroups = groupTextBlocksByFont(textBlocks);
+
+            const paragraphsList = document.getElementById('paragraphsList');
+            const headingsList = document.getElementById('headingsList');
+
+            paragraphsList.innerHTML = '';
+            headingsList.innerHTML = '';
+
+            // Render paragraphs
+            if (textGroups.paragraphs) {
+                for (const fontKey in textGroups.paragraphs) {
+                    const fontBlocks = textGroups.paragraphs[fontKey];
+                    const fontDetails = fontBlocks[0]; // Use the first block to get font details
+
+                    const paragraphItem = document.createElement('li');
+                    paragraphItem.innerText = fontBlocks.map(block => block.text).join('\n');
+                    paragraphsList.appendChild(paragraphItem);
+
+                    const paragraphDetails = document.createElement('span');
+                    paragraphDetails.innerText = `(Font Size: ${fontDetails.font_size}, Font Name: ${fontDetails.font_name})`;
+                    paragraphDetails.style.fontWeight = 'bold';
+                    paragraphItem.appendChild(paragraphDetails);
+                }
+                document.getElementById('paragraphsDiv').style.display = 'block';
+            }
+
+            // Render headings
+            if (textGroups.headings) {
+                for (const fontKey in textGroups.headings) {
+                    const fontBlocks = textGroups.headings[fontKey];
+                    const fontDetails = fontBlocks[0]; // Use the first block to get font details
+
+                    const headingItem = document.createElement('li');
+                    headingItem.innerText = fontBlocks.map(block => block.text).join('\n');
+                    headingsList.appendChild(headingItem);
+
+                    const headingDetails = document.createElement('span');
+                    headingDetails.innerText = `(Font Size: ${fontDetails.font_size}, Font Name: ${fontDetails.font_name})`;
+                    headingDetails.style.fontWeight = 'bold';
+                    headingItem.appendChild(headingDetails);
+                }
+                document.getElementById('headingsDiv').style.display = 'block';
+            }
+        }
+
+        function groupTextBlocksByFont(textBlocks) {
+            const textGroups = {
+                paragraphs: {},
+                headings: {}
+            };
+
+            textBlocks.paragraphs.forEach(block => {
+                const key = `${block.font_size}-${block.font_name}`;
+                if (!textGroups.paragraphs[key]) {
+                    textGroups.paragraphs[key] = [];
+                }
+                textGroups.paragraphs[key].push(block);
+            });
+
+            textBlocks.headings.forEach(block => {
+                const key = `${block.font_size}-${block.font_name}`;
+                if (!textGroups.headings[key]) {
+                    textGroups.headings[key] = [];
+                }
+                textGroups.headings[key].push(block);
+            });
+
+            return textGroups;
+        }
     </script>
+
 </body>
 </html>
