@@ -1,81 +1,59 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+'''
+---main.py---
+For backend setup, routes, uploading file etc.
+Use different file for pdf analysis, grammar check etc.
+'''
+import os
+from flask import Flask, request, jsonify
 from typing import List, Union
+from .pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages
 import fitz
-import requests
 
-app = FastAPI()
+app = Flask(__name__)
 
-from fastapi import FastAPI, HTTPException
+# Upload the file, then call the analysis functions
+@app.route("/upload", methods=["POST"])
+def upload_file():
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
 
-app = FastAPI()
+        file = request.files['file']
 
-@app.get("/")
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+
+        # Save the uploaded file to a folder named 'uploads'
+        upload_folder = os.path.join(app.root_path, 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        file_path = os.path.join(upload_folder, file.filename)
+        file.save(file_path)
+
+        # Extract text content and analyze PDF
+        text_content, text_blocks, pages = process_pdf(file_path)
+
+        text = extract_text_from_pdf(file_path)
+
+        pages = count_pages(file_path)
+
+        stated_number_of_pages = compare_pages(text, pages)
+
+        return jsonify({
+            'message': 'File uploaded successfully',
+            'file_name': file.filename,
+            'file_path': file_path,
+            'text_blocks': text_blocks,
+            'pages_amount': pages,
+            'text_content': text,
+            'stated_equals_actual' : stated_number_of_pages
+
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Keep root at bottom
+@app.route("/")
 async def read_root():
     return {"message": "Hello, World!"}
-
-@app.get("/hello/")
-async def read_hello():
-    return {"message": "Hello, World!"}
-
-@app.get("/greet/{name}")
-async def read_greet(name: str):
-    return {"message": f"Hello, {name}!"}
-
-@app.get("/items/{item_id}")
-async def read_item(item_id: int):
-    return {"item_id": item_id, "message": "Hello, World!"}
-
-
-
-@app.post("/")
-async def check_grammar(file: UploadFile = File(...)):
-    try:
-        # Save the uploaded PDF file
-        with open('temp.pdf', 'wb') as f:
-            f.write(await file.read())
-
-        # Extract text from PDF
-        text = ''
-        doc = fitz.open('temp.pdf')
-        for page in doc:
-            text += page.get_text()
-
-        # Clean up
-        doc.close()
-
-        # Check grammar with LanguageTool
-        grammar_errors = await check_grammar_with_languagetool(text)
-        return grammar_errors
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-async def check_grammar_with_languagetool(text):
-    try:
-        # LanguageTool API URL
-        api_url = 'https://languagetool.org/api/v2/check'
-
-        # Request parameters
-        params = {
-            'text': text,
-            'language': 'en-US',  # Set language (e.g., English US)
-        }
-
-        # Send POST request to LanguageTool API
-        response = await requests.post(api_url, data=params)
-        response.raise_for_status()  # Raise exception for non-200 status codes
-
-        # Parse JSON response
-        results = response.json()
-
-        # Format results
-        grammar_errors = []
-        if 'matches' in results:
-            for match in results['matches']:
-                grammar_errors.append({
-                    'message': match['message'],
-                    'context': match['context']['text'],
-                    'suggested_correction': match['replacements'][0]['value']
-                })
-        return grammar_errors
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
