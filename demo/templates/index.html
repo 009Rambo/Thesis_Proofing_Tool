@@ -28,6 +28,16 @@
         </div>
 
 
+        <div id="numbersDiv" style="display: none;">
+            <h2>Numbers</h2>
+            <ul id="numbersList"></ul>
+        </div>
+
+        <div id="tocDiv" style="display: none;">
+            <h2>Table of Contents</h2>
+            <ul id="tocList"></ul>
+        </div>
+
         <h2>PDF Text Content</h2>
         <pre id="pdfContent"></pre>
     </div>
@@ -114,6 +124,32 @@
                 }
                 document.getElementById('headingsDiv').style.display = 'block';
             }
+
+            // Render numbers
+            if (textBlocks.numbers) {
+                const numbersList = document.getElementById('numbersList');
+                numbersList.innerHTML = '';
+                for (const number of textBlocks.numbers) {
+                    const numberItem = document.createElement('li');
+                    numberItem.innerText = number.text;
+                    numbersList.appendChild(numberItem);
+                }
+                document.getElementById('numbersDiv').style.display = 'block';
+            }
+
+            // Render table of contents
+            if (textBlocks.table_of_contents) {
+                const tocList = document.getElementById('tocList');
+                tocList.innerHTML = '';
+                for (const toc of textBlocks.table_of_contents) {
+                    const tocItem = document.createElement('li');
+                    tocItem.innerText = toc.text;
+                    tocList.appendChild(tocItem);
+                }
+                document.getElementById('tocDiv').style.display = 'block';
+            }
+        
+
         }
 
         function groupTextBlocksByFont(textBlocks) {
