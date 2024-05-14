@@ -2,11 +2,12 @@
 ---main.py---
 For backend setup, routes, uploading file etc.
 Use different file for pdf analysis, grammar check etc.
+Todo: Improve uploading, see: https://flask.palletsprojects.com/en/3.0.x/patterns/fileuploads/
 '''
 import os
 from flask import Flask, request, jsonify
 from typing import List, Union
-from .pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages
+from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages
 import fitz
 
 app = Flask(__name__)
@@ -39,6 +40,11 @@ def upload_file():
 
         stated_number_of_pages = compare_pages(text, pages)
 
+        # Removes the file after analysis
+        # Perhaps find a different way to do this in prod
+        # Preferably something with a timer
+        os.remove(file_path)
+
         return jsonify({
             'message': 'File uploaded successfully',
             'file_name': file.filename,
@@ -55,5 +61,5 @@ def upload_file():
 
 # Keep root at bottom
 @app.route("/")
-async def read_root():
+def read_root():
     return {"message": "Hello, World!"}
