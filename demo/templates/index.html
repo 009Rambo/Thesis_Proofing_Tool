@@ -17,6 +17,8 @@
         <p><strong>File Path:</strong> <span id="filePath"></span></p>
         <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
         <p><strong id="statedEqualsActual"> </strong> </p>
+
+
         <div id="paragraphsDiv" style="display: none;">
             <h2>Paragraphs</h2>
             <ul id="paragraphsList"></ul>
@@ -37,6 +39,7 @@
             <h2>Table of Contents</h2>
             <ul id="tocList"></ul>
         </div>
+
 
         <h2>PDF Text Content</h2>
         <pre id="pdfContent"></pre>
@@ -68,7 +71,9 @@
                     document.getElementById('fileName').innerText = data.file_name;
                     document.getElementById('filePath').innerText = data.file_path;
                     document.getElementById('pagesAmount').innerText = data.pages_amount;
+
                     document.getElementById('statedEqualsActual').innerText = data.stated_equals_actual;
+
                     renderTextBlocks(data.text_blocks);
                     document.getElementById('pdfContent').innerText = data.text_content;
                     document.getElementById('fileInfo').style.display = 'block';

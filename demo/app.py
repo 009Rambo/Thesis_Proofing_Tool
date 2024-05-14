@@ -23,6 +23,7 @@ def upload_file():
         # Process the uploaded file in memory
         pdf_file = fitz.open(stream=file.read(), filetype="pdf")
 
+
         # Extract text content and analyze PDF
         text_content, text_blocks, pages = process_pdf(pdf_file)
 
@@ -32,13 +33,16 @@ def upload_file():
 
         stated_number_of_pages = compare_pages(text, pages)
 
+
         return jsonify({
             'message': 'File uploaded successfully',
             'file_name': file.filename,
+
             'text_blocks': text_blocks,
             'pages_amount': pages,
             'text_content': text,
             'stated_equals_actual' : stated_number_of_pages
+
         }), 200
 
     except Exception as e:
@@ -71,6 +75,7 @@ def analyze_pdf(pdf_file):
         'table_of_contents': []
     }
     try:
+
         for page in pdf_file:
             page_text = page.get_text()
             if page_text.strip():  # Skip empty pages
@@ -103,11 +108,13 @@ def analyze_pdf(pdf_file):
                         if current_text:
                             add_text_block(text_blocks, current_text, current_font_size, current_font_name)
 
+
     except Exception as e:
         logging.error(f'Error analyzing PDF: {str(e)}')
         text_blocks = {'paragraphs': [], 'headings': [], 'numbers': [], 'table_of_contents': []}
 
     return text_blocks
+
 
 def add_text_block(text_blocks, text, font_size, font_name):
     text_block = {
@@ -125,6 +132,7 @@ def add_text_block(text_blocks, text, font_size, font_name):
         text_blocks['paragraphs'].append(text_block)
 
 def count_pages(pdf_file):
+
     pages = 0
     try:
         for _ in pdf_file:
