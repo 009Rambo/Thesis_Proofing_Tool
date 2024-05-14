@@ -2,8 +2,10 @@
 This file will probably be used for grammar check/chatgpt api functionality
 '''
 import fitz  # PyMuPDF
+from .pdf_analysis import extract_text_from_pdf
 import requests
 
+'''
 def extract_text_from_pdf(pdf_url):
     # Download PDF file
     response = requests.get(pdf_url)
@@ -19,6 +21,7 @@ def extract_text_from_pdf(pdf_url):
     # Clean up and return text
     doc.close()
     return text
+'''
 
 def check_grammar_with_languagetool(text):
     # LanguageTool API URL
