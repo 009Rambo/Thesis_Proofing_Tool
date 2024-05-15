@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thesis Checker 3000</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <form id="inputForm">
-    <input type="file" id="fileInput" accept=".pdf" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <h1>Upload a PDF File</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" />
+      <button type="button" id="fileButton">Upload</button>
     </form>
-    <div id="results"></div>
+
+    <div id="message"></div>
+    <div id="fileInfo" style="display: none">
+      <h2>Uploaded File Information</h2>
+      <p><strong>Filename:</strong> <span id="fileName"></span></p>
+      <p><strong>File Path:</strong> <span id="filePath"></span></p>
+      <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
+      <p><strong id="statedEqualsActual"> </strong></p>
+
+      <div id="paragraphsDiv" style="display: none">
+        <h2>Paragraphs</h2>
+        <ul id="paragraphsList"></ul>
+      </div>
+
+      <div id="headingsDiv" style="display: none">
+        <h2>Headings</h2>
+        <ul id="headingsList"></ul>
+      </div>
+
+      <div id="numbersDiv" style="display: none">
+        <h2>Numbers</h2>
+        <ul id="numbersList"></ul>
+      </div>
+
+      <div id="tocDiv" style="display: none">
+        <h2>Table of Contents</h2>
+        <ul id="tocList"></ul>
+      </div>
+
+      <h2>PDF Text Content</h2>
+      <pre id="pdfContent"></pre>
+    </div>
 
     <!-- Include script.js -->
-    <script src="./src/App.js" defer></script>
-</body>
+    <script type="module" src="./src/App.js"></script>
+  </body>
 </html>
