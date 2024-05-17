@@ -14,9 +14,18 @@
     <div id="fileInfo" style="display: none;">
         <h2>Uploaded File Information</h2>
         <p><strong>Filename:</strong> <span id="fileName"></span></p>
-        <p><strong>File Path:</strong> <span id="filePath"></span></p>
         <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
-        <p><strong id="statedEqualsActual"> </strong> </p>
+        <p><strong id="statedEqualsActual"></strong></p>
+
+        <div id="referencedAuthorsDiv" style="display: none;">
+            <h2>Referenced Authors</h2>
+            <ul id="referencedAuthorsList"></ul>
+        </div>
+
+        <div id="foundAuthorsDiv" style="display: none;">
+            <h2>Found Authors in Text</h2>
+            <ul id="foundAuthorsList"></ul>
+        </div>
 
 
         <div id="paragraphsDiv" style="display: none;">
@@ -28,7 +37,6 @@
             <h2>Headings</h2>
             <ul id="headingsList"></ul>
         </div>
-
 
         <div id="numbersDiv" style="display: none;">
             <h2>Numbers</h2>
@@ -69,13 +77,15 @@
 
                 if (response.ok) {
                     document.getElementById('fileName').innerText = data.file_name;
-                    document.getElementById('filePath').innerText = data.file_path;
                     document.getElementById('pagesAmount').innerText = data.pages_amount;
-
                     document.getElementById('statedEqualsActual').innerText = data.stated_equals_actual;
 
                     renderTextBlocks(data.text_blocks);
                     document.getElementById('pdfContent').innerText = data.text_content;
+
+                    renderReferencedAuthors(data.referenced_authors);
+                    renderFoundAuthors(data.found_authors);
+
                     document.getElementById('fileInfo').style.display = 'block';
                 }
 
@@ -131,7 +141,7 @@
             }
 
             // Render numbers
-            if (textBlocks.numbers) {
+            if (textBlocks.numbers.length > 0) {
                 const numbersList = document.getElementById('numbersList');
                 numbersList.innerHTML = '';
                 for (const number of textBlocks.numbers) {
@@ -143,7 +153,7 @@
             }
 
             // Render table of contents
-            if (textBlocks.table_of_contents) {
+            if (textBlocks.table_of_contents.length > 0) {
                 const tocList = document.getElementById('tocList');
                 tocList.innerHTML = '';
                 for (const toc of textBlocks.table_of_contents) {
@@ -153,8 +163,6 @@
                 }
                 document.getElementById('tocDiv').style.display = 'block';
             }
-        
-
         }
 
         function groupTextBlocksByFont(textBlocks) {
@@ -181,7 +189,33 @@
 
             return textGroups;
         }
-    </script>
 
+        function renderReferencedAuthors(authors) {
+            const referencedAuthorsList = document.getElementById('referencedAuthorsList');
+            referencedAuthorsList.innerHTML = '';
+            if (authors.length > 0) {
+                authors.forEach(author => {
+                    const authorItem = document.createElement('li');
+                    authorItem.innerText = author;
+                    referencedAuthorsList.appendChild(authorItem);
+                });
+                document.getElementById('referencedAuthorsDiv').style.display = 'block';
+            }
+        }
+
+        function renderFoundAuthors(foundAuthors) {
+            const foundAuthorsList = document.getElementById('foundAuthorsList');
+            foundAuthorsList.innerHTML = '';
+            if (Object.keys(foundAuthors).length > 0) {
+                for (const author in foundAuthors) {
+                    const occurrences = foundAuthors[author];
+                    const authorItem = document.createElement('li');
+                    authorItem.innerText = `${author} (Occurrences: ${occurrences.length})`;
+                    foundAuthorsList.appendChild(authorItem);
+                }
+                document.getElementById('foundAuthorsDiv').style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
