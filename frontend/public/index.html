@@ -7,11 +7,16 @@
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <h1>Upload a PDF File</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-      <input type="file" name="file" id="fileInput" />
-      <button type="button" id="fileButton">Upload</button>
-    </form>
+    <div id="header">
+      <h1>Upload a PDF File</h1>
+    </div>
+
+    <div id="uploadDiv">
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" />
+        <button type="button" id="fileButton">Upload</button>
+      </form>
+    </div>
 
     <div id="message"></div>
     <div id="fileInfo" style="display: none">
