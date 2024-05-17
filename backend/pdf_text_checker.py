@@ -1,3 +1,6 @@
+'''
+This file will probably be used for grammar check/chatgpt api functionality
+'''
 import fitz  # PyMuPDF
 import requests
 
