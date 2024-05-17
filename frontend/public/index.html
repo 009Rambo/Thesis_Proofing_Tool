@@ -4,22 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thesis Checker 3000</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <div id="header">
-      <h1>Upload a PDF File</h1>
+      <h1>Thesis Checking Tool</h1>
     </div>
 
     <div id="uploadDiv">
+      <h2 style="font-family: 'Ubuntu', sans-serif;">Upload a PDF File</h2>
       <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" id="fileInput" />
         <button type="button" id="fileButton">Upload</button>
       </form>
+      <div id="message"></div>
     </div>
-
-    <div id="message"></div>
-    <div id="fileInfo" style="display: none">
+  
+    <div id="fileInfo" >
       <h2>Uploaded File Information</h2>
       <p><strong>Filename:</strong> <span id="fileName"></span></p>
       <p><strong>File Path:</strong> <span id="filePath"></span></p>
