@@ -1,7 +1,7 @@
 //App.js - Upload file to backend & display results
 //NOTE! Due to us working in vanilla JS, imports must be made like this
 //because other types of importing might not work in all browsers
-import * as renderBlocks from "./render_results.js";
+import * as renderResults from "./render_results.js";
 
 const uploadFile = async (event) => {
   //uploading file to backend
@@ -48,12 +48,43 @@ const displayResults = (data) => {
   document.getElementById("filePath").innerText = data.file_path;
   document.getElementById("pagesAmount").innerText = data.pages_amount;
 
-  document.getElementById("statedEqualsActual").innerText =
-    data.stated_equals_actual;
-
-  renderBlocks.renderTextBlocks(data.text_blocks);
+  document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;    
+  
+  renderResults.renderTextBlocks(data.text_blocks);
+  console.log(data.referenced_authors);
+  renderReferencedAuthors(data.referenced_authors);
+  renderFoundAuthors(data.found_authors);
   document.getElementById("pdfContent").innerText = data.text_content;
   document.getElementById("fileInfo").style.display = "block";
 };
+
+function renderReferencedAuthors(authors) {
+  const referencedAuthorsList = document.getElementById('referencedAuthorsList');
+  referencedAuthorsList.innerHTML = '';
+  if (authors.length > 0) {
+      authors.forEach(author => {
+          const authorItem = document.createElement('li');
+          authorItem.innerText = author;
+          referencedAuthorsList.appendChild(authorItem);
+      });
+      document.getElementById('referencedAuthorsDiv').style.display = 'block';
+  } else {
+    referencedAuthorsList.innerHTML = "No referenced authors found";
+  }
+}
+
+function renderFoundAuthors(foundAuthors) {
+  const foundAuthorsList = document.getElementById('foundAuthorsList');
+  foundAuthorsList.innerHTML = '';
+  if (Object.keys(foundAuthors).length > 0) {
+      for (const author in foundAuthors) {
+          const occurrences = foundAuthors[author];
+          const authorItem = document.createElement('li');
+          authorItem.innerText = `${author} (Occurrences: ${occurrences.length})`;
+          foundAuthorsList.appendChild(authorItem);
+      }
+      document.getElementById('foundAuthorsDiv').style.display = 'block';
+  }
+}
 
 document.getElementById("fileButton").addEventListener("click", uploadFile);
