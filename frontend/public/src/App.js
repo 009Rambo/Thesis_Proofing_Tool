@@ -4,12 +4,15 @@
 import * as renderBlocks from "./render_results.js";
 
 const uploadFile = async (event) => {
-  //uploading file to backend goes here
+  //uploading file to backend
   const fileInput = document.getElementById("fileInput");
   const file = fileInput.files[0];
 
+  const message = document.getElementById("message");
+
   if (!file) {
-    document.getElementById("message").innerText = "Please select a file.";
+    message.innerText = "Please select a file.";
+    message.style.color = "red";
     return;
   }
 
@@ -25,16 +28,20 @@ const uploadFile = async (event) => {
     const data = await resp.json();
 
     if (resp.ok) {
+      message.style.color = "green";
       displayResults(data);
     }
   } catch (error) {
     console.error("Error uploading file:", error);
-    document.getElementById("message").innerText = "Error uploading file.";
+    message.innerText = "Error uploading file.";
+    message.style.color = "red";
   }
 };
 
 const displayResults = (data) => {
   //format and display what backend spits out
+  document.getElementById("fileInfo").style.visibility = "visible";
+
   document.getElementById("message").innerText = data.message;
 
   document.getElementById("fileName").innerText = data.file_name;
