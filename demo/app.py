@@ -185,10 +185,14 @@ def extract_referenced_authors(text):
 def search_referenced_authors_in_text(text, authors):
     found_authors = {}
     for author in authors:
+        references_section_author = text.find(author)
+        #references_section_author = text[references_section_author:]
         author_occurrences = [m.start() for m in re.finditer(re.escape(author), text)]
         if author_occurrences:
             found_authors[author] = author_occurrences
     return found_authors
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
