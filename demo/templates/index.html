@@ -210,7 +210,7 @@
                 for (const author in foundAuthors) {
                     const occurrences = foundAuthors[author];
                     const authorItem = document.createElement('li');
-                    authorItem.innerText = `${author} (Occurrences: ${occurrences.length})`;
+                    authorItem.innerText = `${author} (Occurrences: ${occurrences.length-1})`;
                     foundAuthorsList.appendChild(authorItem);
                 }
                 document.getElementById('foundAuthorsDiv').style.display = 'block';
