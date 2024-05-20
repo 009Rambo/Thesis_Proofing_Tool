@@ -96,3 +96,4 @@ function groupTextBlocksByFont(textBlocks) {
 
   return textGroups;
 }
+
