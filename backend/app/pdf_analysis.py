@@ -151,3 +151,18 @@ def search_referenced_authors_in_text(text, authors):
         if author_occurrences:
             found_authors[author] = author_occurrences
     return found_authors
+
+def find_referenced_urls(text):
+    found_urls = []
+    search_strings = ("http:", "https:")
+    lowtext = text.lower()
+    ref_section_start = lowtext.find('references')
+
+    if ref_section_start != -1:
+        ref_text = lowtext.partition('references')[2]
+        for line in ref_text.splitlines():
+            if line.startswith(search_strings):
+                newline = line.split()[0]
+                found_urls.append(newline)
+                
+    return found_urls

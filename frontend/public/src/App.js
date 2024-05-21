@@ -51,7 +51,7 @@ const displayResults = (data) => {
   document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;    
   
   renderResults.renderTextBlocks(data.text_blocks);
-  console.log(data.referenced_authors);
+  console.log(data.found_urls);
   renderReferencedAuthors(data.referenced_authors);
   renderFoundAuthors(data.found_authors);
   document.getElementById("pdfContent").innerText = data.text_content;

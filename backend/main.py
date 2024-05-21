@@ -8,8 +8,9 @@ import os
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from typing import List, Union
-from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text
+from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text, find_referenced_urls
 import fitz
+from app.crawler import Crawler
 from flask_cors import CORS # This can also be excluded if it works without CORS
 ALLOWED_EXTENSIONS = {"pdf", "docx"} # update as needed
 
@@ -67,6 +68,9 @@ def upload_file():
             # Preferably something with a timer
             #os.remove(file_path)
 
+            found_urls = find_referenced_urls(text_content)
+            url_health = Crawler(found_urls).run()
+
             return jsonify({
             'message': 'File uploaded successfully',
             'file_name': file.filename,
@@ -75,7 +79,8 @@ def upload_file():
             'text_content': text_content,
             'stated_equals_actual': stated_number_of_pages,
             'referenced_authors': referenced_authors,
-            'found_authors': found_authors
+            'found_authors': found_authors,
+            'found_urls': url_health
             }), 200
 
     except Exception as e:
