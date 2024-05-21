@@ -11,14 +11,19 @@ from typing import List, Union
 from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text, find_referenced_urls
 import fitz
 from app.crawler import Crawler
+from flask_cors import CORS # This can also be excluded if it works without CORS
 ALLOWED_EXTENSIONS = {"pdf", "docx"} # update as needed
 
 app = Flask(__name__)
+#CORS(app)
 
 # Check if the uploaded files filetype is in the allowed extensions
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Configure CORS to allow requests from http://localhost:8081
+CORS(app, resources={r"/upload": {"origins": "http://localhost:8081"}}) #This was changed to incorporate CORS
 
 # Upload the file, then call the analysis functions
 @app.route("/upload", methods=["POST"])
@@ -35,7 +40,7 @@ def upload_file():
        # if file is not allowed_file(file.filename):
         #    return jsonify({'error': 'Filetype not allowed'}), 400
 
-        if file:       
+        if file:
             # Save the uploaded file to a folder named 'uploads'
             '''
             upload_folder = os.path.join(app.root_path, 'uploads')
