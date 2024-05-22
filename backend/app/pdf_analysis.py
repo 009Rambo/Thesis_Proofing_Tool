@@ -164,5 +164,27 @@ def find_referenced_urls(text):
             if line.startswith(search_strings):
                 newline = line.split()[0]
                 found_urls.append(newline)
-                
+
     return found_urls
+
+def extract_validate_labels(text):
+    # This pattern captures "PICTURE", "FIGURE", or "TABLE" (case-insensitive) and the following title.
+    pattern = re.compile(r'\b(?:PICTURE|FIGURE|TABLE) \d+\.\s*.+?\.', re.IGNORECASE)
+
+    # Find all matches in the text
+    matches = pattern.findall(text)
+    #print("Found Matches:", matches)
+
+    # Define guidelines for correct labels (case-sensitive)
+    correct_label_pattern = re.compile(r'^(PICTURE|FIGURE|TABLE) \d+\.\s*.+\.$')
+
+    correct_labels = []
+    incorrect_labels = []
+
+    for match in matches:
+        if correct_label_pattern.match(match):
+            correct_labels.append(match.strip())
+        else:
+            incorrect_labels.append(match.strip())
+
+    return correct_labels, incorrect_labels

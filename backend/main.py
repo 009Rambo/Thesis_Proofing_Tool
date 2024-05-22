@@ -8,7 +8,7 @@ import os
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from typing import List, Union
-from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text, find_referenced_urls
+from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text, find_referenced_urls, extract_validate_labels
 import fitz
 from app.crawler import run
 import asyncio
@@ -64,6 +64,9 @@ def upload_file():
             # Count pages and compare with stated number of pages
             stated_number_of_pages = compare_pages(text_content, pages)
 
+            # Extract and validate labels for pictures, figures, and tables
+            correct_labels, incorrect_labels = extract_validate_labels(text_content)
+
             # Removes the file after analysis
             # Perhaps find a different way to do this in prod
             # Preferably something with a timer
@@ -82,7 +85,10 @@ def upload_file():
             'stated_equals_actual': stated_number_of_pages,
             'referenced_authors': referenced_authors,
             'found_authors': found_authors,
-            'found_urls': url_health
+            'found_urls': url_health,
+            'correct_labels_count': len(correct_labels),
+            'incorrect_labels': incorrect_labels
+
             }), 200
 
     except Exception as e:
