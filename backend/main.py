@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from typing import List, Union
 from app.pdf_analysis import process_pdf, extract_text_from_pdf, count_pages, compare_pages, extract_referenced_authors, search_referenced_authors_in_text, find_referenced_urls, extract_validate_labels
 import fitz
-from app.crawler import run
+from app.crawler import run_crawler
 import asyncio
 from flask_cors import CORS # This can also be excluded if it works without CORS
 ALLOWED_EXTENSIONS = {"pdf", "docx"} # update as needed
@@ -73,8 +73,8 @@ def upload_file():
             #os.remove(file_path)
 
             #Finds URLs in references, then pings them
-            found_urls = find_referenced_urls(text_content)
-            url_health = asyncio.run(run(found_urls))
+            found_urls = find_referenced_urls(pdf_file)
+            url_health = asyncio.run(run_crawler(found_urls))
 
             return jsonify({
             'message': 'File uploaded successfully',
