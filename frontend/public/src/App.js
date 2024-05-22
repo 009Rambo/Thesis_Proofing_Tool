@@ -45,15 +45,14 @@ const displayResults = (data) => {
   document.getElementById("message").innerText = data.message;
 
   document.getElementById("fileName").innerText = data.file_name;
-  document.getElementById("filePath").innerText = data.file_path;
   document.getElementById("pagesAmount").innerText = data.pages_amount;
 
   document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;    
-  
+  console.log(data.found_urls[0])
   renderResults.renderTextBlocks(data.text_blocks);
-  console.log(data.found_urls);
   renderReferencedAuthors(data.referenced_authors);
   renderFoundAuthors(data.found_authors);
+  renderUrlHealth(data.found_urls[0])
   document.getElementById("pdfContent").innerText = data.text_content;
   document.getElementById("fileInfo").style.display = "block";
 };
@@ -84,6 +83,21 @@ function renderFoundAuthors(foundAuthors) {
           foundAuthorsList.appendChild(authorItem);
       }
       document.getElementById('foundAuthorsDiv').style.display = 'block';
+  }
+}
+
+function renderUrlHealth(referenceUrls) {
+  const referencedUrlsList = document.getElementById('referencedUrlsList');
+  referencedUrlsList.innerHTML = '';
+  if (Object.keys(referenceUrls).length > 0) {
+    for (const item in referenceUrls) {
+      const currentUrl = referenceUrls[item][0].url;
+      const currentResp = referenceUrls[item][1].resp;
+      const listItem = document.createElement('li');
+      listItem.innerText = `${currentUrl} Code: ${currentResp}`;
+      referencedUrlsList.append(listItem);
+    }
+    document.getElementById('referencedUrlsDiv').style.display = 'block';
   }
 }
 
