@@ -32,6 +32,9 @@ def upload_file():
         # Search for referenced author names in the actual text
         found_authors = search_referenced_authors_in_text(text_content, referenced_authors)
 
+        # Extract and validate labels for pictures, figures, and tables
+        correct_labels, incorrect_labels = extract_validate_labels(text_content)
+
         # Count pages and compare with stated number of pages
         stated_number_of_pages = compare_pages(text_content, pages)
 
@@ -43,8 +46,10 @@ def upload_file():
             'text_content': text_content,
             'stated_equals_actual': stated_number_of_pages,
             'referenced_authors': referenced_authors,
-            'found_authors': found_authors
-        }), 200
+            'found_authors': found_authors,
+            'correct_labels_count': len(correct_labels),
+            'incorrect_labels': incorrect_labels
+            }), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -191,6 +196,28 @@ def search_referenced_authors_in_text(text, authors):
         if author_occurrences:
             found_authors[author] = author_occurrences
     return found_authors
+
+def extract_validate_labels(text):
+    # This pattern captures "PICTURE", "FIGURE", or "TABLE" (case-insensitive) and the following title.
+    pattern = re.compile(r'\b(?:PICTURE|FIGURE|TABLE) \d+\.\s*.+?\.', re.IGNORECASE)
+
+    # Find all matches in the text
+    matches = pattern.findall(text)
+    #print("Found Matches:", matches)
+
+    # Define guidelines for correct labels (case-sensitive)
+    correct_label_pattern = re.compile(r'^(PICTURE|FIGURE|TABLE) \d+\.\s*.+\.$')
+
+    correct_labels = []
+    incorrect_labels = []
+
+    for match in matches:
+        if correct_label_pattern.match(match):
+            correct_labels.append(match.strip())
+        else:
+            incorrect_labels.append(match.strip())
+
+    return correct_labels, incorrect_labels
 
 
 

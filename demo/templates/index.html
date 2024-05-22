@@ -17,6 +17,13 @@
         <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
         <p><strong id="statedEqualsActual"></strong></p>
 
+        <div id="incorrectLabelsDiv" style="display:none;">
+            <h2>Labels that Need Correction</h2>
+            <ul id="incorrectLabelsList"></ul>
+          </div>
+            <p id="correctLabelsCount"></p>
+        </div>
+
         <div id="referencedAuthorsDiv" style="display: none;">
             <h2>Referenced Authors</h2>
             <ul id="referencedAuthorsList"></ul>
@@ -85,6 +92,7 @@
 
                     renderReferencedAuthors(data.referenced_authors);
                     renderFoundAuthors(data.found_authors);
+                    renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
 
                     document.getElementById('fileInfo').style.display = 'block';
                 }
@@ -201,6 +209,24 @@
                 });
                 document.getElementById('referencedAuthorsDiv').style.display = 'block';
             }
+        }
+
+        function renderLabelValidation(correctLabelsCount, incorrectLabels) {
+            const correctLabelsCountElement = document.getElementById('correctLabelsCount');
+            correctLabelsCountElement.innerText = `Number of Correct Labels: ${correctLabelsCount}`;
+
+            const incorrectLabelsList = document.getElementById('incorrectLabelsList');
+            incorrectLabelsList.innerHTML = '';
+            if (incorrectLabels.length > 0) {
+                incorrectLabels.forEach(label => {
+                    const li = document.createElement('li');
+                    li.innerText = label;
+                    incorrectLabelsList.appendChild(li);
+                });
+                document.getElementById('incorrectLabelsDiv').style.display = 'block';
+            } else {
+                    incorrectLabelsList.innerHTML = "All labels are correct";
+                }
         }
 
         function renderFoundAuthors(foundAuthors) {
