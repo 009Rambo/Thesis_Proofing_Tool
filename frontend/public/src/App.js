@@ -48,7 +48,7 @@ const displayResults = (data) => {
   document.getElementById("pagesAmount").innerText = data.pages_amount;
 
   document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;    
-  console.log(data.found_urls[0])
+  
   renderResults.renderTextBlocks(data.text_blocks);
   renderReferencedAuthors(data.referenced_authors);
   renderFoundAuthors(data.found_authors);
