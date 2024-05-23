@@ -24,7 +24,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Configure CORS to allow requests from http://localhost:8081
-CORS(app, resources={r"/upload": {"origins": "http://localhost:8081"}}) #This was changed to incorporate CORS
+CORS(app, resources={r"/upload": {"origins": "http://localhost:8080"}}) #This was changed to incorporate CORS
 
 # Upload the file, then call the analysis functions
 @app.route("/upload", methods=["POST"])
@@ -73,8 +73,8 @@ def upload_file():
             #os.remove(file_path)
 
             #Finds URLs in references, then pings them
-            found_urls = find_referenced_urls(pdf_file)
-            url_health = asyncio.run(run_crawler(found_urls))
+            #found_urls = find_referenced_urls(pdf_file)
+            #url_health = asyncio.run(run_crawler(found_urls))
 
             return jsonify({
             'message': 'File uploaded successfully',
