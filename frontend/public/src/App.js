@@ -47,11 +47,13 @@ const displayResults = (data) => {
   document.getElementById("fileName").innerText = data.file_name;
   document.getElementById("pagesAmount").innerText = data.pages_amount;
 
-  document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;    
-  
+  document.getElementById("statedEqualsActual").innerText = data.stated_equals_actual;
+  console.log(data.found_urls[0])
+
   renderResults.renderTextBlocks(data.text_blocks);
   renderReferencedAuthors(data.referenced_authors);
   renderFoundAuthors(data.found_authors);
+  renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0])
   document.getElementById("pdfContent").innerText = data.text_content;
   document.getElementById("fileInfo").style.display = "block";
@@ -85,6 +87,25 @@ function renderFoundAuthors(foundAuthors) {
       document.getElementById('foundAuthorsDiv').style.display = 'block';
   }
 }
+
+function renderLabelValidation(correctLabelsCount, incorrectLabels) {
+  const correctLabelsCountElement = document.getElementById('correctLabelsCount');
+  correctLabelsCountElement.innerText = `Number of Correct Labels: ${correctLabelsCount}`;
+
+  const incorrectLabelsList = document.getElementById('incorrectLabelsList');
+  incorrectLabelsList.innerHTML = '';
+  if (incorrectLabels.length > 0) {
+    incorrectLabels.forEach(label => {
+      const li = document.createElement('li');
+      li.innerText = label;
+      incorrectLabelsList.appendChild(li);
+    });
+    document.getElementById('incorrectLabelsDiv').style.display = 'block';
+  } else {
+    incorrectLabelsList.innerHTML = "All labels are correct";
+  }
+}
+
 
 function renderUrlHealth(referenceUrls) {
   const referencedUrlsList = document.getElementById('referencedUrlsList');

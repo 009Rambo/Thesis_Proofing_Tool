@@ -154,6 +154,43 @@ def search_referenced_authors_in_text(text, authors):
 
 def find_referenced_urls(pdf_file):
     found_urls = []
+
+    search_strings = ("http:", "https:")
+    lowtext = text.lower()
+    ref_section_start = lowtext.find('references')
+
+    if ref_section_start != -1:
+        ref_text = lowtext.partition('references')[2]
+        for line in ref_text.splitlines():
+            if line.startswith(search_strings):
+                newline = line.split()[0]
+                found_urls.append(newline)
+                
+
+    return found_urls
+
+def extract_validate_labels(text):
+    # This pattern captures "PICTURE", "FIGURE", or "TABLE" (case-insensitive) and the following title.
+    pattern = re.compile(r'\b(?:PICTURE|FIGURE|TABLE) \d+\.\s*.+?\.', re.IGNORECASE)
+
+    # Find all matches in the text
+    matches = pattern.findall(text)
+    #print("Found Matches:", matches)
+
+    # Define guidelines for correct labels (case-sensitive)
+    correct_label_pattern = re.compile(r'^(PICTURE|FIGURE|TABLE) \d+\.\s*.+\.$')
+
+    correct_labels = []
+    incorrect_labels = []
+
+    for match in matches:
+        if correct_label_pattern.match(match):
+            correct_labels.append(match.strip())
+        else:
+            incorrect_labels.append(match.strip())
+
+    return correct_labels, incorrect_labels
+
     for page in pdf_file:
         link = page.first_link
         while link:
@@ -164,3 +201,4 @@ def find_referenced_urls(pdf_file):
                     found_urls.append(new_url)                
             link = link.next
     return found_urls
+
