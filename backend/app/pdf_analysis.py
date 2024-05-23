@@ -152,8 +152,9 @@ def search_referenced_authors_in_text(text, authors):
             found_authors[author] = author_occurrences
     return found_authors
 
-def find_referenced_urls(text):
+def find_referenced_urls(pdf_file):
     found_urls = []
+
     search_strings = ("http:", "https:")
     lowtext = text.lower()
     ref_section_start = lowtext.find('references')
@@ -164,6 +165,7 @@ def find_referenced_urls(text):
             if line.startswith(search_strings):
                 newline = line.split()[0]
                 found_urls.append(newline)
+                
 
     return found_urls
 
@@ -188,3 +190,15 @@ def extract_validate_labels(text):
             incorrect_labels.append(match.strip())
 
     return correct_labels, incorrect_labels
+
+    for page in pdf_file:
+        link = page.first_link
+        while link:
+            if link.is_external:
+                new_url = link.uri
+                new_url = new_url.partition('%2')[0] # Cut off at empty space
+                if new_url not in found_urls:
+                    found_urls.append(new_url)                
+            link = link.next
+    return found_urls
+
