@@ -108,17 +108,43 @@ function renderLabelValidation(correctLabelsCount, incorrectLabels) {
 
 
 function renderUrlHealth(referenceUrls) {
-  const referencedUrlsList = document.getElementById('referencedUrlsList');
-  referencedUrlsList.innerHTML = '';
+  const referencedUrlsTable = document.getElementById('referencedUrlsTable');
+  //Empty the table and add the headers
+  referencedUrlsTable.innerHTML = '';
+  referencedUrlsTable.innerHTML += `<tr>
+  <th>URL</th>
+  <th>Status</th>
+</tr>`
+  
+  let okUrlCounter = 0;
+  let totalUrlCounter = 0;
+
   if (Object.keys(referenceUrls).length > 0) {
     for (const item in referenceUrls) {
       const currentUrl = referenceUrls[item][0].url;
       const currentResp = referenceUrls[item][1].resp;
-      const listItem = document.createElement('li');
-      listItem.innerText = `${currentUrl} Code: ${currentResp}`;
-      referencedUrlsList.append(listItem);
+      // If URL doesn't return OK, add it to the table
+      if (currentResp != 200) {
+        
+        let errorMessage = "";
+
+        if (currentResp >= 400 && currentResp < 500) {
+          errorMessage = `Client error (${currentResp})`;
+        } else if (currentResp >= 500) {
+          errorMessage = `Server error (${currentResp})`;
+        } else if (currentResp == 0) {
+          errorMessage = "Unknown";
+        }
+        
+        const tableItem = `<tr><td>${currentUrl}</td><td>${errorMessage}</td></tr>`;
+        referencedUrlsTable.innerHTML += tableItem;
+      } else {
+        okUrlCounter += 1;
+      }
+      totalUrlCounter += 1;
     }
     document.getElementById('referencedUrlsDiv').style.display = 'block';
+    document.getElementById('okUrls').innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
   }
 }
 
