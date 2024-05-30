@@ -125,10 +125,10 @@ def compare_pages(text, pages):
     if index_fi != -1 or index_eng != -1:
         result = 'Amount of pages stated in thesis matches the actual amount ✅'
     else:
-        result = '❌❌❌Amount of pages stated in thesis does not match the actual amount ❌❌❌' \
+        result = '❌Amount of pages stated in thesis does not match the actual amount ❌' \
                  '\n Make sure you state the amount of pages in one of these formats ' \
-                 '"Opinnäytetyö 55 sivua, joista liitteitä 3 sivua", "Master’s thesis 65 pages, appendices 10 pages" or "Bachelor’s thesis 41 pages, appendices 10 pages".' \
-                 '\n Notice that on Finnish format the amount of pages includes appendices and on English format pages does not include appendices.'
+                 '"Master’s thesis 65 pages, appendices 10 pages" or "Bachelor’s thesis 41 pages, appendices 10 pages".' \
+                 '\n Notice that the amount of pages does not include appendices.'
     return result
 
 def extract_referenced_authors(text):
@@ -147,7 +147,7 @@ def extract_referenced_authors(text):
 def search_referenced_authors_in_text(text, authors):
     found_authors = {}
     for author in authors:
-        author_occurrences = [m.start() for m in re.finditer(re.escape(author), text)]
+        author_occurrences = [m.start() for m in re.finditer(re.escape(author.partition(',')[0]), text)]
         if author_occurrences:
             found_authors[author] = author_occurrences
     return found_authors
