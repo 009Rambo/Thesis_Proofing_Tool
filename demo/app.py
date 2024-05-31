@@ -195,4 +195,4 @@ def search_referenced_authors_in_text(text, authors):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
