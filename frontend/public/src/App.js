@@ -50,6 +50,7 @@ const displayResults = (data) => {
   document.getElementById("statedEqualsActual").innerText =
     data.stated_equals_actual;
 
+  renderResults.renderFontsTable(data.text_blocks);
   // Only render blocks of text if debug is active (box is checked)
   // User doesn't need to see these anyway
   if (document.getElementById("debugCheck").checked == true) {
@@ -134,7 +135,7 @@ function renderLabelValidation(correctLabelsCount, incorrectLabels) {
   }
 }
 
-function renderUrlHealth(referenceUrls) {
+const renderUrlHealth = (referenceUrls) => {
   const referencedUrlsTable = document.getElementById("referencedUrlsTable");
   //Empty the table and add the headers
   referencedUrlsTable.innerHTML = "";
