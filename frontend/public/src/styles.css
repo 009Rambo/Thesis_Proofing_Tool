@@ -41,3 +41,23 @@ body {
   text-align: center;
   display: none;
 }
+
+table {
+  border-collapse: collapse;
+  width: 75%;
+  margin-left: 12%;
+  margin-right: 12%;
+}
+
+tr, td, th {
+  border-bottom: solid #E07BE0 1px;
+}
+
+tbody:nth-child(odd) {
+  background-color: #dcccff;
+}
+
+tr:hover{
+  background-color: #E07BE0;
+}
+

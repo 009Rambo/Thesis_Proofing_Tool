@@ -166,15 +166,7 @@ def find_referenced_urls(pdf_file):
                 newline = line.split()[0]
                 found_urls.append(newline)
 
-    for page in pdf_file:
-        link = page.first_link
-        while link:
-            if link.is_external:
-                new_url = link.uri
-                new_url = new_url.partition('%2')[0] # Cut off at empty space
-                if new_url not in found_urls:
-                    found_urls.append(new_url)
-            link = link.next
+
     return found_urls
 
 
@@ -201,5 +193,14 @@ def extract_validate_labels(text):
 
     return correct_labels, incorrect_labels
 
-
+    for page in pdf_file:
+        link = page.first_link
+        while link:
+            if link.is_external:
+                new_url = link.uri
+                new_url = new_url.partition('%2')[0] # Cut off at empty space
+                if new_url not in found_urls:
+                    found_urls.append(new_url)
+            link = link.next
+    return found_urls
 
