@@ -97,3 +97,35 @@ function groupTextBlocksByFont(textBlocks) {
   return textGroups;
 }
 
+export function renderFontsTable(textBlocks) {
+  const textGroups = groupTextBlocksByFont(textBlocks);
+  const fontsTable = document.getElementById("usedFontsTable");
+  fontsTable.innerHTML = "";
+  fontsTable.innerHTML += `<tr>
+  <th>Font Name</th>
+  <th>Font Size</th>
+  <th>Used In</th>
+  </tr>`;
+
+  if (textGroups.paragraphs) {
+    for (const fontKey in textGroups.paragraphs) {
+      const fontBlocks = textGroups.paragraphs[fontKey];
+      const fontDetails = fontBlocks[0]; // Use the first block to get font details
+
+      const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>Paragraphs</td></tr>`;
+      fontsTable.innerHTML += tableItem;
+    }    
+  }
+
+  if (textGroups.headings) {
+    for (const fontKey in textGroups.headings) {
+      const fontBlocks = textGroups.headings[fontKey];
+      const fontDetails = fontBlocks[0]; // Use the first block to get font details
+
+      const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>Headings</td></tr>`;
+      fontsTable.innerHTML += tableItem;
+    }    
+  }
+
+  document.getElementById("usedFontsDiv").style.display = "block";
+}
