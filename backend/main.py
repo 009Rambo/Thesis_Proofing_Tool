@@ -73,8 +73,8 @@ def upload_file():
             #os.remove(file_path)
 
             #Finds URLs in references, then pings them
-            #found_urls = find_referenced_urls(pdf_file)
-            #url_health = asyncio.run(run_crawler(found_urls))
+            found_urls = find_referenced_urls(pdf_file)
+            url_health = asyncio.run(run_crawler(found_urls))
 
             return jsonify({
             'message': 'File uploaded successfully',
