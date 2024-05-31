@@ -49,15 +49,16 @@ table {
   margin-right: 12%;
 }
 
-tr, td, th {
-  border-bottom: solid #E07BE0 1px;
+tr,
+td,
+th {
+  border-bottom: solid #e07be0 1px;
 }
 
 tbody:nth-child(odd) {
   background-color: #dcccff;
 }
 
-tr:hover{
-  background-color: #E07BE0;
+tr:hover {
+  background-color: #e07be0;
 }
-
