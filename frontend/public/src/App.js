@@ -169,12 +169,12 @@ const renderUrlHealth = (referenceUrls) => {
         okUrlCounter += 1;
       }
       totalUrlCounter += 1;
-    }
-    document.getElementById("referencedUrlsDiv").style.display = "block";
-    document.getElementById(
-      "okUrls"
-    ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
+    }    
   }
+  document.getElementById("referencedUrlsDiv").style.display = "block";
+  document.getElementById(
+    "okUrls"
+  ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
 }
 
 document.getElementById("fileButton").addEventListener("click", uploadFile);
