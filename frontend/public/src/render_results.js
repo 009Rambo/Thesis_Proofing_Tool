@@ -107,25 +107,17 @@ export function renderFontsTable(textBlocks) {
   <th>Used In</th>
   </tr>`;
 
-  if (textGroups.paragraphs) {
-    for (const fontKey in textGroups.paragraphs) {
-      const fontBlocks = textGroups.paragraphs[fontKey];
+  for (const category in textGroups) {
+    for (const fontKey in textGroups[category]) {
+      const fontBlocks = textGroups[category][fontKey];
       const fontDetails = fontBlocks[0]; // Use the first block to get font details
 
-      const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>Paragraphs</td></tr>`;
-      fontsTable.innerHTML += tableItem;
-    }    
+      //If font is not arial of size 12, add to the table
+      if (!fontDetails.font_name.toLowerCase().includes("arial") && fontDetails.font_size != 12) {        
+        const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>${category}</td></tr>`;
+        fontsTable.innerHTML += tableItem;       
+      }      
+    }   
   }
-
-  if (textGroups.headings) {
-    for (const fontKey in textGroups.headings) {
-      const fontBlocks = textGroups.headings[fontKey];
-      const fontDetails = fontBlocks[0]; // Use the first block to get font details
-
-      const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>Headings</td></tr>`;
-      fontsTable.innerHTML += tableItem;
-    }    
-  }
-
   document.getElementById("usedFontsDiv").style.display = "block";
 }
