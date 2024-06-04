@@ -156,7 +156,7 @@ def search_referenced_authors_in_text(text, authors, partition_word):
             found_authors[author] = author_occurrences
     return found_authors
 
-def find_referenced_urls(pdf_file):
+def find_referenced_urls(pdf_file, partition_word):
     #THIS IS THE CORRECT IMPLEMENTATION
     found_urls = []
     for page in pdf_file:
@@ -168,6 +168,17 @@ def find_referenced_urls(pdf_file):
                 if new_url not in found_urls:
                     found_urls.append(new_url)                
             link = link.next
+    text = extract_text_from_pdf(pdf_file)
+    section_text = text.partition(partition_word)[2] #Everything after ToC
+    references = section_text.partition(partition_word)[2] #Just the list of references
+    for line in references.splitlines():
+        url_in_line = line.find("http")
+        if url_in_line != -1:
+            new_raw_url = line[url_in_line:]
+            new_url = new_raw_url.strip()
+            for url in found_urls:
+                url_match = url.find(new_url)
+                found_urls.append(new_url)
     return found_urls
 
 

@@ -73,7 +73,7 @@ def upload_file():
             #os.remove(file_path)
 
             #Finds URLs in references, then pings them
-            found_urls = find_referenced_urls(pdf_file)
+            found_urls = find_referenced_urls(pdf_file, partition_word)
             url_health = asyncio.run(run_crawler(found_urls))
 
             return jsonify({
