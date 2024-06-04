@@ -60,27 +60,33 @@ const displayResults = (data) => {
 
   //renderReferencedAuthors(data.referenced_authors);
   //renderFoundAuthors(data.found_authors);
-  renderAuthors(data.found_authors);
+  renderAuthors(data.found_authors, data.referenced_authors);
   renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0]);
 
   document.getElementById("fileInfo").style.display = "block";
 };
 
-function renderAuthors(foundAuthors) {
+function renderAuthors(foundAuthors, allAuthors) {
   const authorsTable = document.getElementById("foundAuthorsTable");
   authorsTable.innerHTML = "";
   authorsTable.innerHTML += `<tr>
   <th>Author</th>
   <th>Occurences</th>
 </tr>`;
-
-  if (Object.keys(foundAuthors).length > 0) {
-    for (const author in foundAuthors) {
-      const occurrences = foundAuthors[author];
-      const authorItem = `<tr><td>${author}</td><td>${occurrences.length}</td></tr>`;
-      authorsTable.innerHTML += authorItem;
-    }
+  allAuthors.sort();
+  if (allAuthors.length > 0) {
+    for (const index in allAuthors) {
+      const author = allAuthors[index];
+      if (Object.keys(foundAuthors).includes(author)){
+        const occurrences = foundAuthors[author];
+        const authorItem = `<tr><td>${author}</td><td>${occurrences.length}</td></tr>`;
+        authorsTable.innerHTML += authorItem;
+      } else {
+        const authorItem = `<tr><td>${author}</td><td>0</td></tr>`;
+        authorsTable.innerHTML += authorItem;
+      }      
+    }    
     document.getElementById("foundAuthorsDiv").style.display = "block";
   }
 }

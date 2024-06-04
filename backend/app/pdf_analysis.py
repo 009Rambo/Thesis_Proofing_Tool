@@ -135,19 +135,23 @@ def extract_referenced_authors(text):
     # Regular expression to find author names in reference list
     author_pattern = re.compile(r'\b[A-Z][a-z]*, [A-Z]\b')
     references_section_start = text.find('References')
+    partition_word = 'References'
     if references_section_start == -1:
         references_section_start = text.find('REFERENCES')
+        partition_word = 'REFERENCES'
 
     if references_section_start != -1:
         references_section_text = text[references_section_start:]
         authors = author_pattern.findall(references_section_text)
-        return list(set(authors))  # Return unique authors
-    return []
+        return list(set(authors)), partition_word  # Return unique authors
+    return [], partition_word
 
-def search_referenced_authors_in_text(text, authors):
+def search_referenced_authors_in_text(text, authors, partition_word):
     found_authors = {}
+    section_text = text.partition(partition_word)[2] #Everything after ToC
+    text_no_references = section_text.partition(partition_word)[0] #Everything between ToC & Ref list
     for author in authors:
-        author_occurrences = [m.start() for m in re.finditer(re.escape(author.partition(',')[0]), text)]
+        author_occurrences = [m.start() for m in re.finditer(re.escape(author.partition(',')[0]), text_no_references)]
         if author_occurrences:
             found_authors[author] = author_occurrences
     return found_authors

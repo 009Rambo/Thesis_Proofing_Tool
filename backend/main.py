@@ -56,10 +56,10 @@ def upload_file():
             text_content, text_blocks, pages = process_pdf(pdf_file)
 
             # Extract referenced author names from the reference list
-            referenced_authors = extract_referenced_authors(text_content)
+            referenced_authors, partition_word = extract_referenced_authors(text_content)
 
             # Search for referenced author names in the actual text
-            found_authors = search_referenced_authors_in_text(text_content, referenced_authors)
+            found_authors = search_referenced_authors_in_text(text_content, referenced_authors, partition_word)
 
             # Count pages and compare with stated number of pages
             stated_number_of_pages = compare_pages(text_content, pages)
