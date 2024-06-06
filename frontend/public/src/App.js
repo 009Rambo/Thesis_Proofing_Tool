@@ -63,7 +63,7 @@ const displayResults = (data) => {
   renderAuthors(data.found_authors, data.referenced_authors);
   renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0]);
-
+  console.log(data.found_urls[0]);
   document.getElementById("fileInfo").style.display = "block";
 };
 

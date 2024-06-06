@@ -156,18 +156,43 @@ def search_referenced_authors_in_text(text, authors, partition_word):
             found_authors[author] = author_occurrences
     return found_authors
 
-def find_referenced_urls(pdf_file):
+def find_referenced_urls(pdf_file, text, partition_word):
     #THIS IS THE CORRECT IMPLEMENTATION
     found_urls = []
-    for page in pdf_file:
-        link = page.first_link
-        while link:
-            if link.is_external:
-                new_url = link.uri
-                new_url = new_url.partition('%2')[0] # Cut off at empty space
-                if new_url not in found_urls:
-                    found_urls.append(new_url)                
-            link = link.next
+    # First we find all hyperlinks with PyMuPdf
+    try:
+        for page in pdf_file:
+            link = page.first_link
+            while link:
+                if link.is_external:
+                    new_url = link.uri
+                    new_url = new_url.partition('%2')[0] # Cut off at empty space
+                    if new_url not in found_urls:
+                        found_urls.append(new_url)                
+                link = link.next
+    except Exception as e:
+        logging.error("In ref_urls: {}".format(str(e)))
+    # Then we go through the doc as text to find links that weren't formatted as hyperlinks
+    # This isn't perfect: plain text urls with newlines in them fall thru the cracks
+    section_text = text.partition(partition_word)[2] #Everything after ToC
+    references = section_text.partition(partition_word)[2] #Just the list of references
+    try:
+        for line in references.splitlines():
+            url_in_line = line.find("http")
+            if url_in_line != -1: #If url is found in line
+                new_raw_url = line[url_in_line:]
+                new_url = new_raw_url.strip() #Remove whitespace
+                url_in_list = -1 # The rest is to check if the url is already in the list
+                for url in found_urls:
+                    url_match = url.find(new_url)
+                    if url_match != -1:
+                        url_in_list = 0
+                if url_in_list == -1:
+                    if new_url[-1] != "-": #Bandaid fix: remove urls that end with -
+                        found_urls.append(new_url) #because most of them are incorrect/broken
+    except Exception as e:
+        logging.error("In ref_urls 2: {}".format(str(e)))
+    
     return found_urls
 
 
