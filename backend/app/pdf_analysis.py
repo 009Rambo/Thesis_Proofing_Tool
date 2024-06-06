@@ -126,9 +126,10 @@ def compare_pages(text, pages):
         result = 'Amount of pages stated in thesis matches the actual amount ✅'
     else:
         result = '❌Amount of pages stated in thesis does not match the actual amount ❌' \
-                 '\n Make sure you state the amount of pages in one of these formats ' \
-                 '"Master’s thesis 65 pages, appendices 10 pages" or "Bachelor’s thesis 41 pages, appendices 10 pages".' \
-                 '\n Notice that the amount of pages does not include appendices.'
+                 '\n Amount stated in thesis: {} pages, amount of pages in document: {}' \
+                 '\n Make sure you state the amount of pages in one of these formats: ' \
+                 '\n "Master’s thesis 65 pages, appendices 10 pages" or "Bachelor’s thesis 41 pages, appendices 10 pages".' \
+                 '\n Notice that the amount of pages does not include appendices.'.format(str(pagesEng), str(pages))
     return result
 
 def extract_referenced_authors(text):
@@ -182,6 +183,7 @@ def find_referenced_urls(pdf_file, text, partition_word):
             if url_in_line != -1: #If url is found in line
                 new_raw_url = line[url_in_line:]
                 new_url = new_raw_url.strip() #Remove whitespace
+                new_url = new_url.partition(' ')[0] # Cut off at empty space
                 url_in_list = -1 # The rest is to check if the url is already in the list
                 for url in found_urls:
                     url_match = url.find(new_url)
