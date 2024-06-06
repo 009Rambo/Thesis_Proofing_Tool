@@ -63,7 +63,6 @@ const displayResults = (data) => {
   renderAuthors(data.found_authors, data.referenced_authors);
   renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0]);
-  console.log(data.found_urls[0]);
   document.getElementById("fileInfo").style.display = "block";
 };
 
@@ -78,15 +77,15 @@ function renderAuthors(foundAuthors, allAuthors) {
   if (allAuthors.length > 0) {
     for (const index in allAuthors) {
       const author = allAuthors[index];
-      if (Object.keys(foundAuthors).includes(author)){
+      if (Object.keys(foundAuthors).includes(author)) {
         const occurrences = foundAuthors[author];
         const authorItem = `<tr><td>${author}</td><td>${occurrences.length}</td></tr>`;
         authorsTable.innerHTML += authorItem;
       } else {
         const authorItem = `<tr><td>${author}</td><td>0</td></tr>`;
         authorsTable.innerHTML += authorItem;
-      }      
-    }    
+      }
+    }
     document.getElementById("foundAuthorsDiv").style.display = "block";
   }
 }
@@ -175,12 +174,12 @@ const renderUrlHealth = (referenceUrls) => {
         okUrlCounter += 1;
       }
       totalUrlCounter += 1;
-    }    
+    }
   }
   document.getElementById("referencedUrlsDiv").style.display = "block";
   document.getElementById(
     "okUrls"
   ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
-}
+};
 
 document.getElementById("fileButton").addEventListener("click", uploadFile);
