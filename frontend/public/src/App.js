@@ -68,23 +68,29 @@ const displayResults = (data) => {
 
 function renderAuthors(foundAuthors, allAuthors) {
   const authorsTable = document.getElementById("foundAuthorsTable");
+  document.getElementById("allAuthorsFound").innerHTML = "";
   authorsTable.innerHTML = "";
   authorsTable.innerHTML += `<tr>
   <th>Author</th>
   <th>Occurences</th>
 </tr>`;
+  let authorCounter = 0;
   allAuthors.sort();
   if (allAuthors.length > 0) {
     for (const index in allAuthors) {
       const author = allAuthors[index];
       if (Object.keys(foundAuthors).includes(author)) {
-        const occurrences = foundAuthors[author];
-        const authorItem = `<tr><td>${author}</td><td>${occurrences.length}</td></tr>`;
-        authorsTable.innerHTML += authorItem;
+        //const occurrences = foundAuthors[author];
+        //const authorItem = `<tr><td>${author}</td><td>${occurrences.length}</td></tr>`;
+        //authorsTable.innerHTML += authorItem;
       } else {
         const authorItem = `<tr><td>${author}</td><td>0</td></tr>`;
         authorsTable.innerHTML += authorItem;
+        authorCounter += 1;
       }
+    }
+    if (authorCounter == 0) {
+      document.getElementById("allAuthorsFound").innerHTML = "All referenced authors found in text! 👍";
     }
     document.getElementById("foundAuthorsDiv").style.display = "block";
   }
@@ -142,6 +148,7 @@ function renderLabelValidation(correctLabelsCount, incorrectLabels) {
 
 const renderUrlHealth = (referenceUrls) => {
   const referencedUrlsTable = document.getElementById("referencedUrlsTable");
+  document.getElementById("allUrlsOk").innerHTML = ""
   //Empty the table and add the headers
   referencedUrlsTable.innerHTML = "";
   referencedUrlsTable.innerHTML += `<tr>
@@ -168,13 +175,16 @@ const renderUrlHealth = (referenceUrls) => {
           errorMessage = "Unknown";
         }
 
-        const tableItem = `<tr><td>${currentUrl}</td><td>${errorMessage}</td></tr>`;
+        const tableItem = `<tr><td><a href="${currentUrl}">${currentUrl}</a></td><td>${errorMessage}</td></tr>`;
         referencedUrlsTable.innerHTML += tableItem;
       } else {
         okUrlCounter += 1;
       }
       totalUrlCounter += 1;
     }
+  }
+  if (totalUrlCounter == okUrlCounter) {
+    document.getElementById("allUrlsOk").innerHTML = "All referenced URLs ok. 👍"
   }
   document.getElementById("referencedUrlsDiv").style.display = "block";
   document.getElementById(
