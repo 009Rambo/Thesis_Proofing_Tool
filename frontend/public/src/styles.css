@@ -42,6 +42,17 @@ body {
   display: none;
 }
 
+#reportDashboard {
+  margin: auto;
+  padding: 10px;
+  width: 75%;
+  height: 100%;
+  background-color: #f6f2ff;
+  align-items: center;
+  text-align: center;
+  display: none;
+}
+
 table {
   border-collapse: collapse;
   width: 75%;

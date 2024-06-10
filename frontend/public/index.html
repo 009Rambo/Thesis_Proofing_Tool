@@ -20,8 +20,6 @@
       <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" id="fileInput" />
         <button type="button" id="fileButton">Upload</button>
-        <input type="checkbox" id="debugCheck" title="Debug" />
-        <label for="debugCheck">Debug</label>
       </form>
       <div id="message"></div>
     </div>
@@ -63,30 +61,20 @@
           <a href="https://intra.tuni.fi/en/studying/studying-0/tamks-report-guide/report-guide-b-report-layout-structure-and-appendices"> 
             TAMK guide</a>, Arial of font size 12 should be used.</p>
         <table id="usedFontsTable"></table>
-      </div>
+      </div>      
+    </div>
 
-      <div id="paragraphsDiv" style="display: none">
-        <h2>Paragraphs</h2>
-        <ul id="paragraphsList"></ul>
-      </div>
+    <!-- REPORT DASHBOARD -->
+    
+    <div id="reportDashboard">
+      
+      <h2 style="text-decoration: underline;">Full Document Report</h2>
 
-      <div id="headingsDiv" style="display: none">
-        <h2>Headings</h2>
-        <ul id="headingsList"></ul>
+      <div id="allFoundUrlsDiv" style="display: none;">
+        <h2>All URLs Found in Document</h2>
+        <table id="allUrlsTable"></table>
       </div>
-
-      <div id="numbersDiv" style="display: none">
-        <h2>Numbers</h2>
-        <ul id="numbersList"></ul>
-      </div>
-
-      <div id="tocDiv" style="display: none">
-        <h2>Table of Contents</h2>
-        <ul id="tocList"></ul>
-      </div>
-
-      <h2>PDF Text Content</h2>
-      <pre id="pdfContent"></pre>
+    
     </div>
 
     <!-- Include script.js -->

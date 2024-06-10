@@ -41,6 +41,7 @@ const uploadFile = async (event) => {
 const displayResults = (data) => {
   //format and display what backend spits out
   document.getElementById("fileInfo").style.visibility = "visible";
+  document.getElementById("reportDashboard").style.visibility = "visible";
 
   document.getElementById("message").innerText = data.message;
 
@@ -51,19 +52,23 @@ const displayResults = (data) => {
     data.stated_equals_actual;
 
   renderResults.renderFontsTable(data.text_blocks);
-  // Only render blocks of text if debug is active (box is checked)
-  // User doesn't need to see these anyway
-  if (document.getElementById("debugCheck").checked == true) {
-    renderResults.renderTextBlocks(data.text_blocks);
-    document.getElementById("pdfContent").innerText = data.text_content;
-  }
 
+  // User doesn't need to see these
+  //renderResults.renderTextBlocks(data.text_blocks);
+  //document.getElementById("pdfContent").innerText = data.text_content;
+  
+  //These have been replaced with renderAuthors().
+  //Not deleting them in case they're needed later. -Timo
   //renderReferencedAuthors(data.referenced_authors);
   //renderFoundAuthors(data.found_authors);
   renderAuthors(data.found_authors, data.referenced_authors);
   renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0]);
+
+  renderAllUrls(data.found_urls[0]);
+
   document.getElementById("fileInfo").style.display = "block";
+  document.getElementById("reportDashboard").style.display = "block";
 };
 
 function renderAuthors(foundAuthors, allAuthors) {
@@ -76,6 +81,7 @@ function renderAuthors(foundAuthors, allAuthors) {
 </tr>`;
   let authorCounter = 0;
   allAuthors.sort();
+  //This lists only Authors with 0 occurrences
   if (allAuthors.length > 0) {
     for (const index in allAuthors) {
       const author = allAuthors[index];
@@ -175,7 +181,7 @@ const renderUrlHealth = (referenceUrls) => {
           errorMessage = "Unknown";
         }
 
-        const tableItem = `<tr><td><a href="${currentUrl}">${currentUrl}</a></td><td>${errorMessage}</td></tr>`;
+        const tableItem = `<tr><td><a href="${currentUrl}" target="_blank" rel="noopener noreferrer">${currentUrl}</a></td><td>${errorMessage}</td></tr>`;
         referencedUrlsTable.innerHTML += tableItem;
       } else {
         okUrlCounter += 1;
@@ -191,5 +197,20 @@ const renderUrlHealth = (referenceUrls) => {
     "okUrls"
   ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
 };
+
+const renderAllUrls = (urls) => {
+  const urlsTable = document.getElementById("allUrlsTable");
+  urlsTable.innerHTML = "";
+  urlsTable.innerHTML = `<tr><th>URL</th></tr>`;
+
+  if (Object.keys(urls).length > 0) {
+    for (const item in urls) {
+      const currentUrl = urls[item][0].url;
+      const tableItem = `<tr><td><a href="${currentUrl}" target="_blank" rel="noopener noreferrer">${currentUrl}</a></td></tr>`;
+      urlsTable.innerHTML += tableItem;
+    }
+    document.getElementById("allFoundUrlsDiv").style.display = "block";
+  }
+}
 
 document.getElementById("fileButton").addEventListener("click", uploadFile);
