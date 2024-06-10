@@ -111,10 +111,10 @@ export function renderFontsTable(textBlocks) {
     for (const fontKey in textGroups[category]) {
       const fontBlocks = textGroups[category][fontKey];
       const fontDetails = fontBlocks[0]; // Use the first block to get font details
-
+      const exampleText = fontBlocks[0].text.substring(0, 20);
       //If font is not arial of size 12, add to the table
       if (!fontDetails.font_name.toLowerCase().includes("arial") && fontDetails.font_size != 12) {        
-        const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>${category}</td></tr>`;
+        const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>${exampleText}</td></tr>`;
         fontsTable.innerHTML += tableItem;       
       }      
     }   
