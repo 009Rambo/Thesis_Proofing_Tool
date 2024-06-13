@@ -20,6 +20,50 @@ body {
   text-align: center;
 }
 
+#loadingBall {
+  width: 5vh;
+  height: 5vh;
+  border-radius: 100%;
+  background-image: linear-gradient(
+    to bottom left,
+    #932f6d 0%,
+    aqua 50%,
+    aquamarine 75%
+  );
+  display: none;
+
+  animation: loadingAnim 4s infinite;
+}
+
+@keyframes loadingAnim {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+#tabButtonsContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.tabButton {
+  background-color: #e07be0;
+  border: 1px black solid;
+  margin: 1vh;
+  padding-right: 4px;
+  padding-left: 4px;
+  display: none;
+}
+
+.tabButton:hover {
+  background-color: #932f6d;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #uploadDiv {
   margin: auto;
   width: 75%;
@@ -29,6 +73,8 @@ body {
   align-items: center;
   text-align: center;
   border-bottom: solid black 1px;
+  display: flex;
+  flex-direction: column;
 }
 
 #fileInfo {
@@ -72,4 +118,18 @@ tbody:nth-child(odd) {
 
 tr:hover {
   background-color: #e07be0;
+}
+
+.tabContent {
+  display: none;
+  animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

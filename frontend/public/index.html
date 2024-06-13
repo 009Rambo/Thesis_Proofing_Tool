@@ -12,9 +12,10 @@
   </head>
   <body>
     <div id="header">
-      <h1 style="margin-left: 2%;">Thesis Checking Tool</h1>
+      <h1 style="margin-left: 2%">Thesis Checking Tool</h1>
     </div>
 
+    <!--Upload section-->
     <div id="uploadDiv">
       <h2 style="font-family: 'Ubuntu', sans-serif">Upload a PDF File</h2>
       <form id="uploadForm" enctype="multipart/form-data">
@@ -22,60 +23,94 @@
         <button type="button" id="fileButton">Upload</button>
       </form>
       <div id="message"></div>
+
+      <!--Buttons for changing tab-->
+      <div id="tabButtonsContainer">
+        <div id="infoTabButton" class="tabButton">Errors in Document</div>
+        <div id="reportTabButton" class="tabButton">Report Dashboard</div>
+      </div>
+
+      <div id="loadingBall"></div>
     </div>
 
-    <div id="fileInfo">
-      <h2>Uploaded File Information</h2>
-      <p><strong>Filename:</strong> <span id="fileName"></span></p>
-      <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
-      <p><strong id="statedEqualsActual"> </strong></p>
+    <!-- INFO TAB -->
+    <div id="infoTab" class="tabContent">
+      <div id="fileInfo">
+        <h2>Uploaded File Information</h2>
+        <p><strong>Filename:</strong> <span id="fileName"></span></p>
+        <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
+        <p><strong id="statedEqualsActual"> </strong></p>
 
-      <div id="incorrectLabelsDiv" style="display: none">
-        <h2>Labels that Need Correction</h2>
-        <ul id="incorrectLabelsList"></ul>
+        <div id="incorrectLabelsDiv" style="display: none">
+          <h2>Labels that Need Correction</h2>
+          <table id="incorrectLabelsTable"></table>
+          <h3 id="labelsOk"></h3>
+        </div>
+        <p id="correctLabelsCount"></p>
+
+        <div id="referencedAuthorsDiv" style="display: none">
+          <h2>Referenced Authors</h2>
+          <ul id="referencedAuthorsList"></ul>
+        </div>
+
+        <div id="foundAuthorsDiv" style="display: none">
+          <h2>Referenced Authors Not Found in Text</h2>
+          <ul id="foundAuthorsList"></ul>
+          <table id="foundAuthorsTable"></table>
+          <h3 id="allAuthorsFound"></h3>
+        </div>
+
+        <div id="referencedUrlsDiv" style="display: none">
+          <h2>Reference URL Health</h2>
+          <table id="referencedUrlsTable"></table>
+          <h3 id="allUrlsOk"></h3>
+          <p id="okUrls"></p>
+        </div>
+
+        <div id="usedFontsDiv" style="display: none">
+          <h2>Incorrect fonts in document</h2>
+          <p>
+            According to
+            <a
+              href="https://intra.tuni.fi/en/studying/studying-0/tamks-report-guide/report-guide-b-report-layout-structure-and-appendices"
+            >
+              TAMK guide</a
+            >, Arial of font size 12 should be used.
+          </p>
+          <p>
+            Note that this rule does not apply to math equations, code snippets
+            etc.
+          </p>
+          <table id="usedFontsTable"></table>
+        </div>
       </div>
-      <p id="correctLabelsCount"></p>
-
-      <div id="referencedAuthorsDiv" style="display: none">
-        <h2>Referenced Authors</h2>
-        <ul id="referencedAuthorsList"></ul>
-      </div>
-
-      <div id="foundAuthorsDiv" style="display: none">
-        <h2>Referenced Authors Not Found in Text</h2>
-        <ul id="foundAuthorsList"></ul>
-        <table id="foundAuthorsTable"></table>
-        <h3 id="allAuthorsFound"></h3>
-      </div>
-
-      <div id="referencedUrlsDiv" style="display: none">
-        <h2>Reference URL Health</h2>
-        <table id="referencedUrlsTable"></table>
-        <h3 id="allUrlsOk"></h3>
-        <p id="okUrls"></p>
-      </div>
-
-      <div id="usedFontsDiv" style="display: none;">
-        <h2>Incorrect fonts in document</h2>
-        <p>According to 
-          <a href="https://intra.tuni.fi/en/studying/studying-0/tamks-report-guide/report-guide-b-report-layout-structure-and-appendices"> 
-            TAMK guide</a>, Arial of font size 12 should be used.</p>
-            <p>Note that this rule does not apply to math equations, code etc.</p>
-        <table id="usedFontsTable"></table>
-      </div>      
     </div>
 
     <!-- REPORT DASHBOARD -->
-    
-    <div id="reportDashboard">
-      
-      <h2 style="text-decoration: underline;">Full Document Report</h2>
 
-      <div id="allFoundUrlsDiv" style="display: none;">
-        <h2>All URLs Found in Document</h2>
-        <table id="allUrlsTable"></table>
+    <div id="reportTab" class="tabContent">
+      <div id="reportDashboard">
+        <h2 style="text-decoration: underline">Full Document Report</h2>
+
+        <div id="reportInfo">
+          <p>Filename: <span id="reportFileName"></span></p>
+          <p id="reportLabelsCount"></p>
+          <p id="repOkUrls"></p>
+          <p id="repAuthors"></p>
+        </div>
+
+        <div id="allFoundUrlsDiv">
+          <h2>All URLs Found in Document</h2>
+          <div id="urlCollapse" class="collapse">
+            <table id="allUrlsTable"></table>
+          </div>
+        </div>
+
+        <div id="allFoundAuthors">
+          <h2>All Referenced Authors</h2>
+          <table id="allAuthorsTable"></table>
+        </div>
       </div>
-    
     </div>
 
     <!-- Include script.js -->
