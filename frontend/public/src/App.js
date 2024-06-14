@@ -245,3 +245,33 @@ document.getElementById("reportTabButton").addEventListener("click", () => {
   document.getElementById("infoTab").style.display = "none";
   document.getElementById("reportTab").style.display = "block";
 });
+
+document.getElementById("urlCollapseArea").addEventListener("click", () => {
+  const urlCollapse = document.getElementById("urlCollapse");
+  const rightArrow = document.getElementById("urlRightArrow");
+  const downArrow = document.getElementById("urlDownArrow");
+  if (urlCollapse.style.display === "none") {
+    urlCollapse.style.display = "block";
+    rightArrow.style.display = "none";
+    downArrow.style.display = "flex";
+  } else {
+    urlCollapse.style.display = "none";
+    rightArrow.style.display = "flex";
+    downArrow.style.display = "none";
+  }
+});
+
+document.getElementById("authorsCollapseArea").addEventListener("click", () => {
+  const authorCollapse = document.getElementById("authorsCollapse");
+  const rightArrow = document.getElementById("authorRightArrow");
+  const downArrow = document.getElementById("authorDownArrow");
+  if (authorCollapse.style.display === "none") {
+    authorCollapse.style.display = "block";
+    rightArrow.style.display = "none";
+    downArrow.style.display = "flex";
+  } else {
+    authorCollapse.style.display = "none";
+    rightArrow.style.display = "flex";
+    downArrow.style.display = "none";
+  }
+});
