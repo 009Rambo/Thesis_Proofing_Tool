@@ -8,74 +8,162 @@
       href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <div id="header">
-      <h1 style="margin-left: 2%;">Thesis Checking Tool</h1>
+      <h1 style="margin-left: 2%">Thesis Checking Tool</h1>
     </div>
 
+    <!--Upload section-->
     <div id="uploadDiv">
       <h2 style="font-family: 'Ubuntu', sans-serif">Upload a PDF File</h2>
       <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" id="fileInput" />
         <button type="button" id="fileButton">Upload</button>
       </form>
-      <div id="message"></div>
+      <p id="message"></p>
+
+      <!--Buttons for changing tab-->
+      <div id="tabButtonsContainer">
+        <div id="infoTabButton" class="tabButton">
+          <span>Errors in Document</span>
+        </div>
+        <div id="reportTabButton" class="tabButton">
+          <span>Report Dashboard</span>
+        </div>
+      </div>
+
+      <div id="loadingBall"></div>
     </div>
 
-    <div id="fileInfo">
-      <h2>Uploaded File Information</h2>
-      <p><strong>Filename:</strong> <span id="fileName"></span></p>
-      <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
-      <p><strong id="statedEqualsActual"> </strong></p>
+    <!-- INFO TAB -->
+    <div id="infoTab" class="tabContent">
+      <div id="fileInfo">
+        <h2 style="font-family: 'Ubuntu', sans-serif">
+          Uploaded File Information
+        </h2>
+        <p><strong>Filename:</strong> <span id="fileName"></span></p>
+        <p><strong>Amount of Pages:</strong> <span id="pagesAmount"></span></p>
+        <p><strong id="statedEqualsActual"> </strong></p>
 
-      <div id="incorrectLabelsDiv" style="display: none">
-        <h2>Labels that Need Correction</h2>
-        <ul id="incorrectLabelsList"></ul>
+        <div id="incorrectLabelsDiv" style="display: none">
+          <h2 style="font-family: 'Ubuntu', sans-serif">
+            Labels that Need Correction
+          </h2>
+          <table id="incorrectLabelsTable"></table>
+          <h3 id="labelsOk" style="font-family: 'Ubuntu', sans-serif"></h3>
+        </div>
+        <p id="correctLabelsCount"></p>
+
+        <div id="referencedAuthorsDiv" style="display: none">
+          <h2 style="font-family: 'Ubuntu', sans-serif">Referenced Authors</h2>
+          <ul id="referencedAuthorsList"></ul>
+        </div>
+
+        <div id="foundAuthorsDiv" style="display: none">
+          <h2 style="font-family: 'Ubuntu', sans-serif">
+            Referenced Authors Not Found in Text
+          </h2>
+          <ul id="foundAuthorsList"></ul>
+          <table id="foundAuthorsTable"></table>
+          <h3
+            id="allAuthorsFound"
+            style="font-family: 'Ubuntu', sans-serif"
+          ></h3>
+        </div>
+
+        <div id="referencedUrlsDiv" style="display: none">
+          <h2 style="font-family: 'Ubuntu', sans-serif">
+            Reference URL Health
+          </h2>
+          <table id="referencedUrlsTable"></table>
+          <h3 id="allUrlsOk" style="font-family: 'Ubuntu', sans-serif"></h3>
+          <p id="okUrls"></p>
+        </div>
+
+        <div id="usedFontsDiv" style="display: none">
+          <h2 style="font-family: 'Ubuntu', sans-serif">
+            Incorrect fonts in document
+          </h2>
+          <p>
+            According to
+            <a
+              href="https://intra.tuni.fi/en/studying/studying-0/tamks-report-guide/report-guide-b-report-layout-structure-and-appendices"
+            >
+              TAMK guide</a
+            >, Arial of font size 12 should be used.
+          </p>
+          <p>
+            Note that this rule does not apply to math equations, code snippets
+            etc.
+          </p>
+          <table id="usedFontsTable"></table>
+        </div>
       </div>
-      <p id="correctLabelsCount"></p>
-
-      <div id="referencedAuthorsDiv" style="display: none">
-        <h2>Referenced Authors</h2>
-        <ul id="referencedAuthorsList"></ul>
-      </div>
-
-      <div id="foundAuthorsDiv" style="display: none">
-        <h2>Referenced Authors Not Found in Text</h2>
-        <ul id="foundAuthorsList"></ul>
-        <table id="foundAuthorsTable"></table>
-        <h3 id="allAuthorsFound"></h3>
-      </div>
-
-      <div id="referencedUrlsDiv" style="display: none">
-        <h2>Reference URL Health</h2>
-        <table id="referencedUrlsTable"></table>
-        <h3 id="allUrlsOk"></h3>
-        <p id="okUrls"></p>
-      </div>
-
-      <div id="usedFontsDiv" style="display: none;">
-        <h2>Incorrect fonts in document</h2>
-        <p>According to 
-          <a href="https://intra.tuni.fi/en/studying/studying-0/tamks-report-guide/report-guide-b-report-layout-structure-and-appendices"> 
-            TAMK guide</a>, Arial of font size 12 should be used.</p>
-            <p>Note that this rule does not apply to math equations, code etc.</p>
-        <table id="usedFontsTable"></table>
-      </div>      
     </div>
 
     <!-- REPORT DASHBOARD -->
-    
-    <div id="reportDashboard">
-      
-      <h2 style="text-decoration: underline;">Full Document Report</h2>
 
-      <div id="allFoundUrlsDiv" style="display: none;">
-        <h2>All URLs Found in Document</h2>
-        <table id="allUrlsTable"></table>
+    <div id="reportTab" class="tabContent">
+      <div id="reportDashboard">
+        <h2 style="font-family: 'Ubuntu', sans-serif">Full Document Report</h2>
+
+        <div id="reportInfo">
+          <p>Filename: <span id="reportFileName"></span></p>
+          <p id="reportLabelsCount"></p>
+          <p id="repOkUrls"></p>
+          <p id="repAuthors"></p>
+        </div>
+
+        <div id="allFoundUrlsDiv" class="reportDiv">
+          <div id="urlCollapseArea" class="collapse">
+            <div
+              id="urlDownArrow"
+              class="downArrow"
+              style="display: none"
+            ></div>
+            <div
+              id="urlRightArrow"
+              class="rightArrow"
+              style="display: flex"
+            ></div>
+            <a href="#urlCollapse"><span class="linkSpan"></span></a>
+            <h2 style="font-family: 'Ubuntu', sans-serif">
+              All URLs Found in Document
+            </h2>
+          </div>
+          <div id="urlCollapse">
+            <table id="allUrlsTable"></table>
+          </div>
+        </div>
+
+        <div id="allFoundAuthors" class="reportDiv">
+          <div id="authorsCollapseArea" class="collapse">
+            <div
+              id="authorDownArrow"
+              class="downArrow"
+              style="display: none"
+            ></div>
+            <div
+              id="authorRightArrow"
+              class="rightArrow"
+              style="display: flex"
+            ></div>
+            <a href="#authorsCollapse"><span class="linkSpan"></span></a>
+            <h2 style="font-family: 'Ubuntu', sans-serif">
+              All Referenced Authors
+            </h2>
+          </div>
+          <div id="authorsCollapse">
+            <table id="allAuthorsTable"></table>
+          </div>
+        </div>
       </div>
-    
     </div>
 
     <!-- Include script.js -->

@@ -19,6 +19,7 @@ const uploadFile = async (event) => {
   const formData = new FormData();
   formData.append("file", file);
   message.innerText = "Uploading, please wait...";
+  setLoading(true);
   try {
     const resp = await fetch("http://localhost:5000/upload", {
       method: "POST",
@@ -35,6 +36,7 @@ const uploadFile = async (event) => {
     console.error("Error uploading file:", error);
     message.innerText = "Error uploading file.";
     message.style.color = "red";
+    setLoading(false);
   }
 };
 
@@ -44,8 +46,8 @@ const displayResults = (data) => {
   document.getElementById("reportDashboard").style.visibility = "visible";
 
   document.getElementById("message").innerText = data.message;
-
   document.getElementById("fileName").innerText = data.file_name;
+  document.getElementById("reportFileName").innerText = data.file_name;
   document.getElementById("pagesAmount").innerText = data.pages_amount;
 
   document.getElementById("statedEqualsActual").innerText =
@@ -54,21 +56,38 @@ const displayResults = (data) => {
   renderResults.renderFontsTable(data.text_blocks);
 
   // User doesn't need to see these
-  //renderResults.renderTextBlocks(data.text_blocks);
-  //document.getElementById("pdfContent").innerText = data.text_content;
-  
-  //These have been replaced with renderAuthors().
-  //Not deleting them in case they're needed later. -Timo
-  //renderReferencedAuthors(data.referenced_authors);
-  //renderFoundAuthors(data.found_authors);
+  //renderResults.renderTextBlocks(data.text_blocks); //Renders all text in doc in blocks sorted by font
+  //document.getElementById("pdfContent").innerText = data.text_content; //Displays all text in doc
+
   renderAuthors(data.found_authors, data.referenced_authors);
   renderLabelValidation(data.correct_labels_count, data.incorrect_labels);
   renderUrlHealth(data.found_urls[0]);
-
   renderAllUrls(data.found_urls[0]);
+
+  renderReferencedAuthors(data.referenced_authors);
+
+  setLoading(false);
+  //Reveal tab buttons
+  const tabBtns = document.getElementsByClassName("tabButton");
+  for (let i = 0; i < tabBtns.length; i++) {
+    tabBtns[i].style.display = "block";
+  }
+  //Open file info tab
+  document.getElementById("infoTabButton").click();
 
   document.getElementById("fileInfo").style.display = "block";
   document.getElementById("reportDashboard").style.display = "block";
+};
+
+//Displays loading ball animation
+//Call: setLoading(true/false)
+const setLoading = (loading) => {
+  let isLoading = loading;
+  if (isLoading) {
+    document.getElementById("loadingBall").style.display = "block";
+  } else {
+    document.getElementById("loadingBall").style.display = "none";
+  }
 };
 
 function renderAuthors(foundAuthors, allAuthors) {
@@ -96,40 +115,13 @@ function renderAuthors(foundAuthors, allAuthors) {
       }
     }
     if (authorCounter == 0) {
-      document.getElementById("allAuthorsFound").innerHTML = "All referenced authors found in text! 👍";
+      document.getElementById("allAuthorsFound").innerHTML =
+        "All referenced authors found in text! 👍";
     }
     document.getElementById("foundAuthorsDiv").style.display = "block";
-  }
-}
-
-function renderReferencedAuthors(authors) {
-  const referencedAuthorsList = document.getElementById(
-    "referencedAuthorsList"
-  );
-  referencedAuthorsList.innerHTML = "";
-  if (authors.length > 0) {
-    authors.forEach((author) => {
-      const authorItem = document.createElement("li");
-      authorItem.innerText = author;
-      referencedAuthorsList.appendChild(authorItem);
-    });
-    document.getElementById("referencedAuthorsDiv").style.display = "block";
-  } else {
-    referencedAuthorsList.innerHTML = "No referenced authors found";
-  }
-}
-
-function renderFoundAuthors(foundAuthors) {
-  const foundAuthorsList = document.getElementById("foundAuthorsList");
-  foundAuthorsList.innerHTML = "";
-  if (Object.keys(foundAuthors).length > 0) {
-    for (const author in foundAuthors) {
-      const occurrences = foundAuthors[author];
-      const authorItem = document.createElement("li");
-      authorItem.innerText = `${author} (Occurrences: ${occurrences.length})`;
-      foundAuthorsList.appendChild(authorItem);
-    }
-    document.getElementById("foundAuthorsDiv").style.display = "block";
+    document.getElementById("repAuthors").innerHTML = `Authors found in text: ${
+      allAuthors.length - authorCounter
+    }, total authors: ${allAuthors.length}`;
   }
 }
 
@@ -137,24 +129,32 @@ function renderLabelValidation(correctLabelsCount, incorrectLabels) {
   const correctLabelsCountElement =
     document.getElementById("correctLabelsCount");
   correctLabelsCountElement.innerText = `Number of Correct Labels: ${correctLabelsCount}`;
+  document.getElementById("labelsOk").innerText = "";
 
-  const incorrectLabelsList = document.getElementById("incorrectLabelsList");
-  incorrectLabelsList.innerHTML = "";
+  //For report tab
+  let totalLabels = correctLabelsCount + incorrectLabels.length;
+  document.getElementById(
+    "reportLabelsCount"
+  ).innerText = `Correct labels: ${correctLabelsCount}, total labels: ${totalLabels}`;
+
+  const incorrectLabelsTable = document.getElementById("incorrectLabelsTable");
+  incorrectLabelsTable.innerHTML = "";
+  incorrectLabelsTable.innerHTML += `<tr><th>Label</th><tr>`;
   if (incorrectLabels.length > 0) {
     incorrectLabels.forEach((label) => {
-      const li = document.createElement("li");
-      li.innerText = label;
-      incorrectLabelsList.appendChild(li);
+      const tableItem = `<tr><td>${label}</td></tr>`;
+      incorrectLabelsTable.innerHTML += tableItem;
     });
-    document.getElementById("incorrectLabelsDiv").style.display = "block";
   } else {
-    incorrectLabelsList.innerHTML = "All labels are correct";
+    document.getElementById("labelsOk").innerText =
+      "All labels are correct! 👍";
   }
+  document.getElementById("incorrectLabelsDiv").style.display = "block";
 }
 
 const renderUrlHealth = (referenceUrls) => {
   const referencedUrlsTable = document.getElementById("referencedUrlsTable");
-  document.getElementById("allUrlsOk").innerHTML = ""
+  document.getElementById("allUrlsOk").innerHTML = "";
   //Empty the table and add the headers
   referencedUrlsTable.innerHTML = "";
   referencedUrlsTable.innerHTML += `<tr>
@@ -190,13 +190,19 @@ const renderUrlHealth = (referenceUrls) => {
     }
   }
   if (totalUrlCounter == okUrlCounter) {
-    document.getElementById("allUrlsOk").innerHTML = "All referenced URLs ok. 👍"
+    document.getElementById("allUrlsOk").innerHTML =
+      "All referenced URLs ok. 👍";
   }
   document.getElementById("referencedUrlsDiv").style.display = "block";
   document.getElementById(
     "okUrls"
   ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
+  document.getElementById(
+    "repOkUrls"
+  ).innerText = `Working URLs: ${okUrlCounter}, total URLs: ${totalUrlCounter}`;
 };
+
+//-----------REPORT TAB RENDERERS-----------//
 
 const renderAllUrls = (urls) => {
   const urlsTable = document.getElementById("allUrlsTable");
@@ -211,6 +217,61 @@ const renderAllUrls = (urls) => {
     }
     document.getElementById("allFoundUrlsDiv").style.display = "block";
   }
-}
+};
 
+const renderReferencedAuthors = (authors) => {
+  const allAuthorsTable = document.getElementById("allAuthorsTable");
+  allAuthorsTable.innerHTML = "";
+  allAuthorsTable.innerHTML += `<tr><th>Author</th></tr>`;
+  if (authors.length > 0) {
+    authors.forEach((author) => {
+      const authorItem = `<tr><td>${author}</td></tr>`;
+      allAuthorsTable.innerHTML += authorItem;
+    });
+  } else {
+    allAuthorsTable.innerHTML += "No referenced authors found";
+  }
+};
+
+//-----------EVENT LISTENERS-----------//
 document.getElementById("fileButton").addEventListener("click", uploadFile);
+
+document.getElementById("infoTabButton").addEventListener("click", () => {
+  document.getElementById("infoTab").style.display = "block";
+  document.getElementById("reportTab").style.display = "none";
+});
+
+document.getElementById("reportTabButton").addEventListener("click", () => {
+  document.getElementById("infoTab").style.display = "none";
+  document.getElementById("reportTab").style.display = "block";
+});
+
+document.getElementById("urlCollapseArea").addEventListener("click", () => {
+  const urlCollapse = document.getElementById("urlCollapse");
+  const rightArrow = document.getElementById("urlRightArrow");
+  const downArrow = document.getElementById("urlDownArrow");
+  if (urlCollapse.style.display === "none") {
+    urlCollapse.style.display = "block";
+    rightArrow.style.display = "none";
+    downArrow.style.display = "flex";
+  } else {
+    urlCollapse.style.display = "none";
+    rightArrow.style.display = "flex";
+    downArrow.style.display = "none";
+  }
+});
+
+document.getElementById("authorsCollapseArea").addEventListener("click", () => {
+  const authorCollapse = document.getElementById("authorsCollapse");
+  const rightArrow = document.getElementById("authorRightArrow");
+  const downArrow = document.getElementById("authorDownArrow");
+  if (authorCollapse.style.display === "none") {
+    authorCollapse.style.display = "block";
+    rightArrow.style.display = "none";
+    downArrow.style.display = "flex";
+  } else {
+    authorCollapse.style.display = "none";
+    rightArrow.style.display = "flex";
+    downArrow.style.display = "none";
+  }
+});
