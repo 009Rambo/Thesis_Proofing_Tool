@@ -53,7 +53,7 @@ const displayResults = (data) => {
   document.getElementById("statedEqualsActual").innerText =
     data.stated_equals_actual;
 
-  renderResults.renderFontsTable(data.text_blocks);
+  renderResults.renderFontsTable(data.text_blocks); //Render table of unallowed fonts
 
   // User doesn't need to see these
   //renderResults.renderTextBlocks(data.text_blocks); //Renders all text in doc in blocks sorted by font
