@@ -1,4 +1,5 @@
 //Functions to render textblocks etc analysis results go here
+//TODO: Cleanup, only 2 of these funcs are actually used (renderFontsTable & groupBlocksByFont)
 
 export function renderTextBlocks(textBlocks) {
   const textGroups = groupTextBlocksByFont(textBlocks);
@@ -113,11 +114,14 @@ export function renderFontsTable(textBlocks) {
       const fontDetails = fontBlocks[0]; // Use the first block to get font details
       const exampleText = fontBlocks[0].text.substring(0, 20);
       //If font is not arial of size 12, add to the table
-      if (!fontDetails.font_name.toLowerCase().includes("arial") && fontDetails.font_size != 12) {        
+      if (
+        !fontDetails.font_name.toLowerCase().includes("arial") &&
+        fontDetails.font_size != 12
+      ) {
         const tableItem = `<tr><td>${fontDetails.font_name}</td><td>${fontDetails.font_size}</td><td>${exampleText}</td></tr>`;
-        fontsTable.innerHTML += tableItem;       
-      }      
-    }   
+        fontsTable.innerHTML += tableItem;
+      }
+    }
   }
   document.getElementById("usedFontsDiv").style.display = "block";
 }
